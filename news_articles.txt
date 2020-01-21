@@ -1,0 +1,18 @@
+var bob = {
+    "Puerto Rico": [
+        {"url": "https://en.wikinews.org/wiki/Seismic_activity_continues_to_shake_Puerto_Rico_with_5.2_quake", "sentiment": "0"}, 
+        {"url": "https://en.wikinews.org/wiki/Puerto_Rico_Supreme_Court_removes_Governor_Pierluisi;_Wanda_V%C3%A1zquez_becomes_governor", "sentiment": "-0.3"}, 
+        {"url": "https://en.wikinews.org/wiki/Puerto_Rico%27s_governor_Rossell%C3%B3_resigns,_new_governor_sworn_in", "sentiment": "-0.1"}]
+    "Chiefs": [
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}]
+    "Apple": [
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}]
+    "Florida": [
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}, 
+        {"url": "", "sentiment": ""}]
+}
