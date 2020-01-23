@@ -73,12 +73,12 @@ html, body {
     position: fixed;
     left: 0;
     bottom: 0;
-    height: 100px;
+    height: 8%;
     width: 100%;
     background-color: var(--top-bottom);
     color: var(--top-bottom);
     text-align: center;
-    padding: 30px;
+    padding: 5px;
 }
 
 #chartContainer {

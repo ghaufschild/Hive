@@ -28,13 +28,13 @@
         <div class="container-fluid header">
             <div class="row">
                 <div class="col-sm-2 left-title"></div>
-                <div class="col-sm-5 title">
+                <div class="col-sm-4 title">
                     <span id="brand">
                         Hive
                         <img id="logo" alt="Image" src="hive.png">
                     </span>
                 </div>
-                <div class="col-sm-3 search">
+                <div class="col-sm-4 search">
                     <div class="row">
                         <div class="col-sm-9 question">
                             <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
@@ -66,6 +66,7 @@
         question = question.toLowerCase();
 
         var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
             title: {
                 text: "Sentiment for " + question
             },
