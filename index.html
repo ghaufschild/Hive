@@ -24,30 +24,39 @@
 </head>
 
 <body>
-    <div style="text-align:center" class="content">
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Hive</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                    <a class="nav-item nav-link" href="#">Features</a>
-                    <a class="nav-item nav-link" href="#">About</a>
-                    <a class="nav-item nav-link disabled" href="#">Deluxe</a>
+    <div class="background text-center">
+        <div class="container-fluid header">
+            <div class="row">
+                <div class="col-sm-2 left-title"></div>
+                <div class="col-sm-5 title">
+                    <span id="brand">
+                        Hive
+                        <img id="logo" alt="Image" src="hive.png">
+                    </span>
                 </div>
+                <div class="col-sm-3 search">
+                    <div class="row">
+                        <div class="col-sm-9 question">
+                            <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-outline-warning" onclick="askWatson()">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 right-title"></div>
             </div>
-        </nav>
-        <div class="topic">
-            Please enter a topic:
-            <input type="text" id="question" value="" maxlength="100" />
-            <button type="submit" onclick="askWatson()">Submit</button>
         </div>
-        <div id="chartContainer" style="height: 500px; width: 100%;"></div>
+
+        <div class="row content">
+            <div class="col-sm-2 left-nav"></div>
+            <div class="col-sm-8 display">
+                <div id="chartContainer"></div>
+            </div>
+            <div class="col-sm-2 right-nav"></div>
+        </div>
+
+        <div class="container-fluid footer"><b>HIVE</b></div>
     </div>
 </body>
 
@@ -77,6 +86,10 @@
 
                 dataPoints: bob[question] || bob["default"]
             }]
+        });
+
+        $('#chartContainer').css({
+            'border': 'solid black 5px'
         });
 
         chart.render();
@@ -173,4 +186,5 @@
         "google": [30, 40, 32, 20, 25, 10, 15]
     }
 </script>
+
 </html>
