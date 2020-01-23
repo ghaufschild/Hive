@@ -87,3 +87,13 @@ html, body {
     height: 80%;
     width: 94%;
 }
+
+#placeholder {
+    height: 250px;
+    width: 250px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -125px;
+}
