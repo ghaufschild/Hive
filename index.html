@@ -5,24 +5,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hive</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/site.css">
 
     <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script>
     <script src="js/site.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
+    <style>
+        .canvasjs-chart-tooltip {
+            pointer-events: auto !important;
+        }
+    </style>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 
 <body>
     <div style="text-align:center" class="content">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Hive</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-                aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -41,9 +47,7 @@
             <input type="text" id="question" value="" maxlength="100" />
             <button type="submit" onclick="askWatson()">Submit</button>
         </div>
-        <div class="chart-container">
-            <canvas id="answer"></canvas>
-        </div>
+        <div id="chartContainer" style="height: 500px; width: 100%;"></div>
     </div>
 </body>
 
@@ -51,63 +55,122 @@
     function askWatson() {
         var question = $("#question").val();
         question = question.toLowerCase();
-        var ctx = document.getElementById('answer').getContext('2d');
-        var chart = new Chart(ctx, {
-            // The type of chart we want to create
-            type: 'line',
 
-            // The data for our dataset
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                datasets: [{
-                    label: question,
-                    borderColor: 'rgb(255, 165, 0)',
-                    data: bob[question],
-                    fill: false,
-                    lineTension: 0
-                }]
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Sentiment for " + question
             },
+            axisY: {
+                maximum: 1,
+                minimum: -1,
+                title: "Sentiment"
+            },
+            axisX: {
+                title: "Time",
+                valueFormatString: "MMM",
+                interval: 1,
+                intervalType: "month"
+            },
+            data: [{
+                type: "line",
+                toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
 
-            // Configuration options go here
-            options: {
-                layout: {
-                    padding: {
-                        left: 20,
-                        right: 20,
-                        top: 0,
-                        bottom: 0
-                    },
-                    maintainAspectRatio: false
-                },
-                tooltips: {
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            var label = data[tooltipItem.datasetIndex].title || '';
-        
-                            if (label) {
-                                label += ': ';
-                            }
-                            label += Math.round(tooltipItem.yLabel * 100) / 100;
-                            return label;
-                        }
-                    }
-                }
-            }
-
+                dataPoints: bob[question] || bob["default"]
+            }]
         });
 
-        ctx.height = 500;
+        chart.render();
     }
 
     var bob = {
+        "default": [{
+                "x": new Date(2012, 00, 1),
+                "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": -0.8
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": 0.6
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": -0.2
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": 0.6
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": 0.0
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": -0.9
+            }
+        ],
         "patriots": [{
-            "title": "GOOGLE",
-            "url": "google.com",
-            "y": 3
-            }],
+                "x": new Date(2012, 00, 1),
+                "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": -0.6
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": -0.8
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": 0.8
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": 0.7
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": 0.1
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": -0.2
+            }
+        ],
         "manchester united": [0, 5, 25, 3, 16, 27, 0],
         "google": [30, 40, 32, 20, 25, 10, 15]
     }
 </script>
-
 </html>

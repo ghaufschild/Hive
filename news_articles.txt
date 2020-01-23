@@ -12,7 +12,7 @@ var bob = {
     "Florida": [
       {"title": "Family of Four Found Dead in Disney Community, Suspect in Custody", "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody", "sentiment": -0.6},
       {"title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits", "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits", "sentiment": 0.2},
-      {"title": "State-run bus crashes in Cuba en route to Havana, killing seven","url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven", "sentiment": -0.8}
+      {"title": "State-run bus crashes in Cuba en route to Havana, killing seven","url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven", "sentiment": -0.8},
       {"title": "NASA's TESS spacecraft reports its first exoplanet", "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet", "sentiment": 0.8},
       {"title": "Space Shuttle Discovery", "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery", "sentiment": 0.7},
       {"title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists", "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists", "sentiment": 0.1},
