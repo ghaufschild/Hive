@@ -65,10 +65,16 @@
         var question = $("#question").val();
         question = question.toLowerCase();
 
+        if (question) {
+            questionTitle = question.charAt(0).toUpperCase() + question.substring(1)
+        } else {
+            questionTitle = "Default"
+        }
+
         var chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             title: {
-                text: "Sentiment for " + question
+                text: "Sentiment for " + questionTitle
             },
             axisY: {
                 maximum: 1,
