@@ -4,10 +4,14 @@
 }
 
 .topic {
-    margin-bottom: 50px;
-    font-size: 20px;
+    margin: 50px 0px;
+    font-size: 40px;
 }
 
 .text-area {
     margin-bottom: 30px;
+}
+
+.chart-container {
+    height: 300px;
 }
