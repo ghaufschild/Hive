@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hive</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/site.css">
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script>
+    <script src="js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <style>
+        .canvasjs-chart-tooltip {
+            pointer-events: auto !important;
+        }
+    </style>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+
+<body>
+    <div class="background text-center">
+        <div class="container-fluid header">
+            <div class="row">
+                <div class="col-sm-2 left-title"></div>
+                <div class="col-sm-4 title">
+                    <span id="brand">
+                        Hive
+                        <img id="logo" alt="Image" src="hive.png">
+                    </span>
+                </div>
+                <div class="col-sm-4 search">
+                    <div class="row">
+                        <div class="col-sm-9 question">
+                            <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-outline-warning" onclick="askWatson()">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 right-title"></div>
+            </div>
+        </div>
+
+        <div class="row content">
+            <div class="col-sm-2 left-nav"></div>
+            <div class="col-sm-8 display">
+                <div id="chartContainer">
+                    <img id="placeholder" alt="Image" src="flying_bee.gif">
+                </div>
+            </div>
+            <div class="col-sm-2 right-nav"></div>
+        </div>
+
+        <div class="container-fluid footer"><b>HIVE</b></div>
+    </div>
+</body>
+
+<script>
+    function askWatson() {
+        var question = $("#question").val();
+        question = question.toLowerCase();
+
+        if (question) {
+            questionTitle = question.charAt(0).toUpperCase() + question.substring(1)
+        } else {
+            questionTitle = "Default"
+        }
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Sentiment for " + questionTitle
+            },
+            axisY: {
+                maximum: 1,
+                minimum: -1,
+                title: "Sentiment"
+            },
+            axisX: {
+                title: "Time",
+                valueFormatString: "MMM",
+                interval: 1,
+                intervalType: "month"
+            },
+            data: [{
+                type: "line",
+                toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+
+                dataPoints: bob[question] || getDefault()
+            }]
+        });
+
+        $('#chartContainer').css({
+            'border': 'solid black 5px'
+        });
+
+        chart.render();
+    }
+
+    var bob = {
+        "patriots": [{
+                "x": new Date(2012, 00, 1),
+                "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": -0.6
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": -0.8
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": 0.8
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": 0.7
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": 0.1
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": -0.2
+            }
+        ],
+        "puerto rico": [{
+                "x": new Date(2012, 00, 1),
+                "title": "Seismic activity continues to shake Puerto Rico with 5.2 quake",
+                "url": "https://en.wikinews.org/wiki/Seismic_activity_continues_to_shake_Puerto_Rico_with_5.2_quake",
+                "y": -0.4
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Puerto Rico Supreme Court removes Governor Pierluisi; Wanda Vázquez becomes governor",
+                "url": "https://en.wikinews.org/wiki/Puerto_Rico_Supreme_Court_removes_Governor_Pierluisi;_Wanda_V%C3%A1zquez_becomes_governor",
+                "y": 0
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "Puerto Rico's governor Rosselló resigns, new governor sworn in",
+                "url": "https://en.wikinews.org/wiki/Puerto_Rico%27s_governor_Rossell%C3%B3_resigns,_new_governor_sworn_in",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "Man jumps to his death off Royal Caribbean cruise ship docked in Puerto Rico",
+                "url": "https://www.nbcnews.com/news/us-news/man-jumps-his-death-royal-caribbean-cruise-ship-docked-puerto-n1121276",
+                "y": -0.2
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Puerto Rico welcomes visitors despite recent earthquakes",
+                "url": "https://www.washingtonpost.com/lifestyle/travel/puerto-rico-welcomes-visitors-despite-recent-earthquakes/2020/01/22/43b9c19c-3c6d-11ea-baca-eb7ace0a3455_story.html",
+                "y": 0.3
+            } 
+        ],
+        "super bowl": [{
+                "x": new Date(2012, 00, 1),
+                "title": "Chris Jones (calf) expects to be a full-go for Super Bowl",
+                "url": "http://www.nfl.com/news/story/0ap3000001098740/article/chris-jones-calf-expects-to-be-a-fullgo-for-super-bowl",
+                "y": 0.5
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Sorry, Chiefs Kingdom: NFL says no to Super Bowl tailgating in Hard Rock Stadium parking lots",
+                "url": "https://fox4kc.com/2020/01/23/sorry-chiefs-kingdom-nfl-says-no-to-super-bowl-tailgating-in-hard-rock-stadium-parking-lots/",
+                "y": -0.4
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "Super Bowl LIV: Chiefs, 49ers determine which jerseys they will wear for title game",
+                "url": "https://www.foxnews.com/sports/super-bowl-liv-chiefs-49ers-jerseys",
+                "y": 0.0
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "J.Lo’s ‘butt cleavage’ and other outlandish Super Bowl prop bets",
+                "url": "https://fox2now.com/2020/01/22/j-los-butt-cleavage-and-other-outlandish-super-bowl-prop-bets/",
+                "y": 0.2
+            }
+        ]
+    }
+
+    function getDefault() {
+        return [{
+                "x": new Date(2012, 00, 1),
+                "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": Math.random() * 2 - 1
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": Math.random() * 2 - 1
+            }
+        ]
+    }
+</script>
+
+</html>
