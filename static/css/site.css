@@ -73,12 +73,12 @@ html, body {
     position: fixed;
     left: 0;
     bottom: 0;
-    height: 8%;
+    height: 100px;
     width: 100%;
     background-color: var(--top-bottom);
     color: var(--top-bottom);
     text-align: center;
-    padding: 5px;
+    padding: 30px;
 }
 
 #chartContainer {
@@ -86,14 +86,4 @@ html, body {
     margin-left: 35px;
     height: 80%;
     width: 94%;
-}
-
-#placeholder {
-    height: 250px;
-    width: 250px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -150px;
-    margin-left: -125px;
 }
