@@ -21,5 +21,18 @@ def index():
 
     return response
 
+@app.route("/about")
+def about():
+    context = { 'server_time': format_server_time() }
+    
+    template = render_template('about.html', context=context)
+    # 2
+    response = make_response(template)
+    # 3
+    response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
+
+    return response
+
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
