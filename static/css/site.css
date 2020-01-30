@@ -1,0 +1,89 @@
+:root {
+  --top-bottom: #373737;
+  --center: #FEBE43;
+  --left-right-1: #696969;
+  --left-right-2: #525252;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.background {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.content {
+    flex-grow: 1;
+}
+
+.header {
+    border-bottom: 5px solid white;
+    color: white;
+    height: 100px;
+    background-color: var(--top-bottom);
+}
+
+.title {
+    margin: 10px 20px;
+    text-align: left;
+}
+
+#brand {
+    font-family: Marker Felt, fantasy;
+    font-variant: small-caps;
+    font-size: 3.2em;
+    font-weight: 700;
+}
+
+#logo {
+    height: 60px;
+    width: 50px;
+    padding-bottom: 10px;
+}
+
+.search {
+    margin: 10px 20px;
+    text-align: right;
+    padding-top: 20px;
+    padding-right: 100px;
+}
+
+.display {
+    border-left: 5px solid white;
+    border-right: 5px solid white;
+    background-color: var(--center);
+}
+
+.left-nav, .right-nav {
+    background: repeating-linear-gradient(
+        45deg,
+        var(--left-right-1),
+        var(--left-right-1) 25px,
+        var(--left-right-2) 25px,
+        var(--left-right-2) 50px);
+}
+
+.footer {
+    border-top: 5px solid white;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background-color: var(--top-bottom);
+    color: var(--top-bottom);
+    text-align: center;
+    padding: 30px;
+}
+
+#chartContainer {
+    margin-top: 35px;
+    margin-left: 35px;
+    height: 80%;
+    width: 94%;
+}

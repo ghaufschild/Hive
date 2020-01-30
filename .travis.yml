@@ -1,0 +1,7 @@
+language: python
+script:
+ - echo "Deploy!!"
+install:
+  - npm install -g firebase-tools
+after_success:
+  - firebase deploy --project hive-5914 --token $FIREBASE_TOKEN
