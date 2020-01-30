@@ -1,5 +1,7 @@
 language: python
 
+node_js:
+  - 13.7.0
 script:
  - echo "Deploy!!"
 install:
