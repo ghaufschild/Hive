@@ -1,10 +1,18 @@
-language: python
+# using a matrix, we can trigger multiple builds at once, which is how we work with two languages in one project
+matrix:
+  include:
+    - language: python
+      python: 3.7
+      script: pytest
+  
+    - language: node_js
+      node_js: 13.7.0
+      install:
+        - npm install -g firebase-tools
 
-node_js:
-  - 13.7.0
-script:
- - echo "Deploy!!"
-install:
-  - npm install -g firebase-tools
 after_success:
   - firebase deploy --project hive-5914 --token $FIREBASE_TOKEN
+
+branches:
+  only:
+    - master
