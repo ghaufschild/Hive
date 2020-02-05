@@ -10,7 +10,7 @@ def format_server_time():
 
 @app.route('/')
 def index():
-    '''context = { 'server_time': format_server_time() }
+    context = { 'server_time': format_server_time() }
 
     template = render_template('index.html', context=context)
     # 2
@@ -18,12 +18,11 @@ def index():
     # 3
     response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
 
-    return response'''
-    return render_template('index.html')
+    return response
 
 @app.route("/about")
 def about():
-    '''context = { 'server_time': format_server_time() }
+    context = { 'server_time': format_server_time() }
     
     template = render_template('about.html', context=context)
     # 2
@@ -31,8 +30,7 @@ def about():
     # 3
     response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
 
-    return response'''
-    return render_template('about.html')
+    return response
 
 
 if __name__ == '__main__':
