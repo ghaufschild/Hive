@@ -10,9 +10,8 @@ matrix:
       install:
         - npm install -g firebase-tools
 
-after_success:
-  - firebase deploy --project hive-5914 --token $FIREBASE_TOKEN
-
-branches:
-  only:
-    - master
+deploy:
+  provider: firebase
+  token:
+    secure: $FIREBASE_TOKEN
+  project: "hive-5914"
