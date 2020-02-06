@@ -12,7 +12,3 @@ matrix:
 
 after_success:
   - firebase deploy --project hive-5914 --token $FIREBASE_TOKEN
-
-branches:
-  only:
-    - master
