@@ -1,0 +1,15 @@
+{
+  "name": "hive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Warning: no test specified\nWill currently allow builds\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "firebase-tools": "^7.12.1"
+  }
+}
