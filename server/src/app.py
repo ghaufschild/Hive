@@ -59,13 +59,32 @@ def getAverageSentimentScore(queryResults):
 
     return averageSentiment
 
+def getClosestURL(results, targetSentiment):
+    closestURL = 'hive-5914.web.add'
+
+    closestURLDistance = 5
+
+    for currentResult in results['results']:
+        if currentResult['result_metadata']['confidence'] > 0.01:
+            sentimentScore = currentResult['enriched_body']['sentiment']['document']['score']
+
+            distanceToTarget = abs(sentimentScore - targetSentiment)
+
+            if (distanceToTarget < closestURLDistance):
+                closestURLDistance = distanceToTarget
+                closestURL = currentResult['url']
+                #print(str(distanceToTarget) + ': ' + closestURL)
+
+    return closestURL
+
+
+
 def getResults(query, endDate, daysPrior):
 
     resultDictionary = {
         'queryString' : query,
         'endingDate' : str(endDate),
         'daysPrior' : daysPrior,
-
     }
 
     dayQueryDict = {}
@@ -77,21 +96,17 @@ def getResults(query, endDate, daysPrior):
 
         sentimentScore = getAverageSentimentScore(daysResults)
 
+        returnURL = getClosestURL(daysResults, sentimentScore)
+
         currentDayInformationDict = {
             'date' : str(currentDate),
             'sentiment' : str(sentimentScore),
-            'url' : 'https://www.cnbc.com/2020/02/04/coronavirus-latest-updates.html'
+            'url' : returnURL
         }
 
         dayQueryDict[str(currentDate)] = currentDayInformationDict
 
-        #print(str(dayQueryDict))
-
     resultDictionary['results'] = dayQueryDict
-
-
-    #print(resultDictionary)
-
 
     return resultDictionary
 
