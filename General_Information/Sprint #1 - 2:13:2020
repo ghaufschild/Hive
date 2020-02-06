@@ -1,8 +1,0 @@
-Sprint #1
-
-Key Deliverables:
-	- Configure test environment:
-	- Get a Flask Web App running:
-		- Return website front-end
-	- Back-end service which gets information from Watson
-		- add results to database on Firebase instance

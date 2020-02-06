@@ -21,6 +21,7 @@
         }
     </style>
     <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
 
 <body>
@@ -48,14 +49,16 @@
             </div>
         </div>
 
-        <div class="row content">
-            <div class="col-sm-2 left-nav"></div>
-            <div class="col-sm-8 display">
-                <div id="chartContainer">
-                    <img id="placeholder" alt="Image" src="flying_bee.gif">
+        <div class="container-fluid background">
+            <div class="row content">
+                <div class="col-sm-2 left-nav"></div>
+                <div class="col-sm-8 display">
+                    <div id="chartContainer">
+                        <img id="placeholder" alt="Image" src="flying_bee.gif">
+                    </div>
                 </div>
+                <div class="col-sm-2 right-nav"></div>
             </div>
-            <div class="col-sm-2 right-nav"></div>
         </div>
 
         <div class="container-fluid footer"><b>HIVE</b></div>
@@ -64,6 +67,10 @@
 
 <script>
     function askWatson() {
+        $.post('bob-route', {word: "test"},  function(err, req, resp){
+            console.log(resp["responseJSON"]["uuid"]);
+        });
+
         var question = $("#question").val();
         question = question.toLowerCase();
 
@@ -178,7 +185,7 @@
                 "title": "Puerto Rico welcomes visitors despite recent earthquakes",
                 "url": "https://www.washingtonpost.com/lifestyle/travel/puerto-rico-welcomes-visitors-despite-recent-earthquakes/2020/01/22/43b9c19c-3c6d-11ea-baca-eb7ace0a3455_story.html",
                 "y": 0.3
-            } 
+            }
         ],
         "super bowl": [{
                 "x": new Date(2012, 00, 1),

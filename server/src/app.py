@@ -11,7 +11,7 @@ def format_server_time():
 @app.route('/')
 def index():
     context = { 'server_time': format_server_time() }
-    
+
     # 1
     template = render_template('index.html', context=context)
     # 2
@@ -20,6 +20,14 @@ def index():
     response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
 
     return response
+
+@app.route('/bob-route', methods = ['POST'])
+def post__data():
+    jsdata = request.form['word']
+    unique_id = create_csv(jsdata)
+    params = { 'uuid' : unique_id }
+    return jsonify(params)
+    print ("POSTED")
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
