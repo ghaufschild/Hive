@@ -65,3 +65,12 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# local python virtual environment folder - Travis creates its own on each build
+env/
+
+# local vscode environment
+.vscode
+
+# python cache
+__pycache__/
