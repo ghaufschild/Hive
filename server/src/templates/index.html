@@ -62,6 +62,10 @@
 
 <script>
     function askWatson() {
+        $.get('/search/test', function(err, req, resp){
+            console.log(resp["responseJSON"]["uuid"]);
+        });
+
         var question = $("#question").val();
         question = question.toLowerCase();
 
