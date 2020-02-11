@@ -52,7 +52,7 @@
                 <div class="col-sm-2 left-nav"></div>
                 <div class="col-sm-8 display">
                     <div id="chartContainer">
-                        <img href="img/flying_bee.gif">
+                        <img src="img/flying_bee.gif"></img>
                     </div>
                 </div>
                 <div class="col-sm-2 right-nav"></div>
@@ -65,14 +65,21 @@
 
 <script>
     function askWatson() {
+        $.get('/search/test', function(err, req, resp){
+            console.log(resp);
+
+            if (err != 200) {
+                var results = JSON.parse(text).results;
+
+                for (var i = 0; i < 4; i++) {
+                    results[i].x = new Date(results[i].year, results[i].month, results[i].day);
+                    console.log(results[i].x);
+                }
+            }
+        });
+
         var question = $("#question").val();
         question = question.toLowerCase();
-
-        var base = '/search/';
-        var query = base.concat(question);
-        $.get(query, function(err, req, resp){
-            console.log(resp);
-        });
 
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
@@ -85,9 +92,8 @@
             },
             axisX: {
                 title: "Time",
-                valueFormatString: "MMM",
-                interval: 1,
-                intervalType: "month"
+                valueFormatString: "MMM DD",
+                interval: 1
             },
             data: [{
                 type: "line",
@@ -95,28 +101,33 @@
 
                 // dataPoints: bob[question] || bob["default"]
 
-                dataPoints: results;
+                dataPoints: results
             }]
         });
-
-        var text = '{ "results": [' +
-        '{ "year":"2020", "month":"01", "day":"01", "y":"0.5", "url":"google.com", "title":"google"},' +
-        '{ "year":"2020", "month":"01", "day":"02", "y":"0.7", "url":"google.com", "title":"amazon"},' +
-        '{ "year":"2020", "month":"01", "day":"03", "y":"0.3", "url":"google.com", "title":"firefox"},' +
-        '{ "year":"2020", "month":"01", "day":"04", "y":"-0.2", "url":"google.com", "title":"explorer"}]}';
-
-        var results = JSON.parse(text);
-
-        for (var i = 0; i < results.length(); i++) {
-            results[i].x = new Date(results[i].year, results[i].month, results[i].day);
-        }
 
         $('#chartContainer').css({
             'border': 'solid black 5px'
         });
 
+        console.log(results);
+
         chart.render();
     }
+
+    var text = '{ "results": [' +
+    '{ "year":"2020", "month":"01", "day":"01", "y":0.5, "url":"google.com", "title":"google"},' +
+    '{ "year":"2020", "month":"01", "day":"02", "y":0.7, "url":"google.com", "title":"amazon"},' +
+    '{ "year":"2020", "month":"01", "day":"03", "y":0.3, "url":"google.com", "title":"firefox"},' +
+    '{ "year":"2020", "month":"01", "day":"04", "y":-0.2, "url":"google.com", "title":"explorer"}]}';
+
+    var results = JSON.parse(text).results;
+
+    for (var i = 0; i < 4; i++) {
+        results[i].x = new Date(results[i].year, results[i].month, results[i].day);
+        console.log(results[i].x);
+    }
+
+    console.log(results);
 
     var bob = {
         "default": [{
@@ -208,6 +219,8 @@
         "manchester united": [0, 5, 25, 3, 16, 27, 0],
         "google": [30, 40, 32, 20, 25, 10, 15]
     }
+
+    console.log(bob["default"]);
 </script>
 
 </html>
