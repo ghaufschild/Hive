@@ -66,6 +66,12 @@
         var question = $("#question").val();
         question = question.toLowerCase();
 
+        var base = '/search/';
+        var query = base.concat(question);
+        $.get(query, function(err, req, resp){
+            console.log(resp);
+        });
+
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
                 text: "Sentiment for " + question
