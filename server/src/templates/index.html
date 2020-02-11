@@ -65,21 +65,23 @@
 
 <script>
     function askWatson() {
-        $.get('/search/test', function(err, req, resp){
-            console.log(resp);
+        var question = $("#question").val();
+        question = question.toLowerCase();
 
-            if (err != 200) {
-                var results = JSON.parse(text).results;
+        var base = '/search/';
+        var query = base.concat(question);
+        $.get(query, function(err, req, resp){
+            if (req == "success") {
+                results = resp.responseJSON.results;
 
                 for (var i = 0; i < 4; i++) {
                     results[i].x = new Date(results[i].year, results[i].month, results[i].day);
                     console.log(results[i].x);
                 }
+            } else {
+                results = bob["default"];
             }
         });
-
-        var question = $("#question").val();
-        question = question.toLowerCase();
 
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
