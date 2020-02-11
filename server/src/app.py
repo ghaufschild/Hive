@@ -115,7 +115,6 @@ def about():
 @app.route('/search/<query>')
 def search(query):
     return getResults('coronavirus', date.today(), 3)
-    #return 'hello'
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
