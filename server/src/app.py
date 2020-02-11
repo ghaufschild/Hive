@@ -5,7 +5,6 @@ from datetime import date, timedelta
 from ibm_watson import DiscoveryV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-
 app = Flask(__name__)
 
 authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
@@ -35,7 +34,10 @@ def getAverageSentimentScore(queryResults):
             sentimentSum = sentimentSum + doc['enriched_body']['sentiment']['document']['score']
             totalItems = totalItems + 1
 
-    averageSentiment = sentimentSum / totalItems
+    if totalItems == 0:
+        averageSentiment = None
+    else:
+        averageSentiment = sentimentSum / totalItems
 
     return averageSentiment
 
@@ -75,14 +77,25 @@ def getResults(query, endDate, daysPrior):
 
         sentimentScore = getAverageSentimentScore(daysResults)
 
-        returnResult = getClosestResult(daysResults, sentimentScore)
+        returnResult = None
+
+        if sentimentScore is not None:
+            returnResult = getClosestResult(daysResults, sentimentScore)
 
         currentDayInformationDict = {
-            'date' : str(currentDate),
-            'sentiment' : str(sentimentScore),
-            'url' : returnResult['url'],
-            'title': returnResult['title']
+            'date': str(currentDate),
+            'sentiment': None,
+            'url': None,
+            'title': None
         }
+
+        if returnResult is not None:
+            currentDayInformationDict = {
+                'date' : str(currentDate),
+                'sentiment' : str(sentimentScore),
+                'url' : returnResult['url'],
+                'title': returnResult['title']
+            }
 
         dayQueryDict[str(currentDate)] = currentDayInformationDict
 
@@ -114,8 +127,9 @@ def about():
 
 @app.route('/search/<query>')
 def search(query):
-    return getResults('coronavirus', date.today(), 3)
+    return getResults('Tesla', date.today(), 7)
     #return 'hello'
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
+    print(search(""))
+    #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
