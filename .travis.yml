@@ -7,9 +7,13 @@ matrix:
   
     - language: node_js
       node_js: 13.7.0
+      install:
+        - npm install -g firebase-tools
 
 deploy:
   provider: firebase
   token:
     secure: $FIREBASE_TOKEN
   project: "hive-5914"
+  on:
+    branch: master
