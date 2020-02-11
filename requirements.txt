@@ -1,2 +1,5 @@
 pytest
 Flask
+ibm-watson
+ibm-cloud-sdk-core
+requests
