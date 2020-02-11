@@ -15,3 +15,5 @@ deploy:
   token:
     secure: $FIREBASE_TOKEN
   project: "hive-5914"
+  on:
+    branch: master
