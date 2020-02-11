@@ -2,7 +2,7 @@
 FROM python:3.7
 
 # 2
-RUN pip install -r ../requirements.txt
+RUN pip install pytest Flask ibm-watson ibm-cloud-sdk-core requests
 
 # 3
 COPY src/ /app
