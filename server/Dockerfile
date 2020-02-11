@@ -2,7 +2,7 @@
 FROM python:3.7
 
 # 2
-RUN pip install -r ../requirements.txt
+RUN pip install Flask gunicorn ibm-watson requests
 
 # 3
 COPY src/ /app
