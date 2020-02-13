@@ -10,11 +10,10 @@ discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/in
 env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
 collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
 
-my_query = discovery.query(env_id, collection_id, natural_language_query='coronavirus', count=50).get_result()
-
-days = [date.today() + timedelta(days=d) for d in range(-4,1)]
-
-for doc in my_query['results']:
-    if doc['result_metadata']['confidence'] > 0.01:
-        print(doc['title'], doc['enriched_body']['sentiment']['document']['score'])
-
+def get_results(query):
+    my_query = discovery.query(env_id, collection_id, natural_language_query='coronavirus', count=50).get_result()
+    days = [date.today() + timedelta(days=d) for d in range(-4,1)]
+    
+    for doc in my_query['results']:
+        if doc['result_metadata']['confidence'] > 0.01:
+            print(doc['title'], doc['enriched_body']['sentiment']['document']['score'])

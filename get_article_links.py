@@ -13,11 +13,14 @@ discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/in
 env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
 collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
 
-feed = feedparser.parse('http://www.cnbc.com/id/100727362/device/rss/rss.html')
-links = []
+#feed = feedparser.parse('http://www.cnbc.com/id/100727362/device/rss/rss.html')
 
-for item in feed['items'][8:]:
-    link = item['links'][0]['href']
+content = requests.get('https://www.cnbc.com/site-map/2020/February/12/', allow_redirects=True).content
+soup = BeautifulSoup(content, features="html.parser")
+articles_list = soup.find('div', {'class': 'SiteMapArticleList-articleData'})
+links = [article['href'] for article in articles_list.findChildren('a', recursive=True)]
+
+for link in links:
     print(link)
     try:
         content = requests.get(link, allow_redirects=True).content
@@ -30,6 +33,7 @@ for item in feed['items'][8:]:
     except Exception as e:
         print('Failed to parse or upload document')
         print(e)
+
 
 '''
 my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
