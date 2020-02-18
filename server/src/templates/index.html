@@ -65,7 +65,6 @@
 </body>
 
 <script>
-
     var text = '{ "results": [' +
     '{ "year":"2020", "month":"01", "day":"01", "y":0.5, "url":"google.com", "title":"google"},' +
     '{ "year":"2020", "month":"01", "day":"02", "y":0.7, "url":"google.com", "title":"amazon"},' +
@@ -102,7 +101,6 @@
             dataPoints: chartData
         }]
     });
-
 
     function askWatson() {
         document.getElementById("chartContainer").style.display = "none"
@@ -145,12 +143,7 @@
                 document.getElementById("placeholder").style.display = "none"
                 chart.render();
             }
-
-            
         });
-
-        
-
     }
 
     // console.log(results);
