@@ -97,3 +97,14 @@ html, body {
     margin-top: -150px;
     margin-left: -125px;
 }
+
+.trending li h4 {
+    display: inline;
+    text-align: center;
+
+}
+
+.trending ul {
+    list-style: none;
+    padding-left: 0px;
+}

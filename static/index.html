@@ -26,14 +26,14 @@
     <div class="background text-center">
         <div class="container-fluid header">
             <div class="row">
-                <div class="col-sm-2 left-title"></div>
-                <div class="col-sm-4 title">
+                <div class="col-2 left-title"></div>
+                <div class="col-4 title">
                     <span id="brand">
                         Hive
-                        <img id="logo" alt="Image" src="img/hive-logo.png">
+                        <img id="logo" alt="Image" src="img/hive-logo-main.png">
                     </span>
                 </div>
-                <div class="col-sm-4 search">
+                <div class="col-4 search">
                     <div class="row">
                         <div class="col-sm-9 question">
                             <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
@@ -43,20 +43,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2 right-title"></div>
+                <div class="col-2 right-title"></div>
             </div>
         </div>
 
         <div class="container-fluid background">
             <div class="row content">
-                <div class="col-sm-2 left-nav"></div>
-                <div class="col-sm-8 display">
+                <div class="col-2 left-nav">
+                    <div class="col-12 trending">
+                        <h2>Trending</h2>
+                        <ul>
+                            <li>
+                                <span><h4>Trump</h4> <h4>.05</h4>&#x2191;</span>
+                            </li>
+                            <li>
+                                <span><h4>Bernie</h4> <h4>.06</h4>&#x2193;</span>
+                            </li>
+                            <li>
+                                <span><h4>Coronavirus</h4> <h4>.25</h4>&#x2193;</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-8 display">
                     <div id="chartContainer" style="display:none">
                         
                     </div>
                     <img id="placeholder" src="img/flying_bee.gif"></img>
                 </div>
-                <div class="col-sm-2 right-nav"></div>
+                <div class="col-2 right-nav"></div>
             </div>
         </div>
 
