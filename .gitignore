@@ -1,5 +1,7 @@
 #Mac files
 .DS_Store
+# Static HTML files
+static/*.html
 # Logs
 logs
 *.log

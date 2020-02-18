@@ -27,13 +27,13 @@
         <div class="container-fluid header">
             <div class="row">
                 <div class="col-sm-2 left-title"></div>
-                <div class="col-sm-5 title">
+                <div class="col-sm-4 title">
                     <span id="brand">
                         Hive
                         <img id="logo" alt="Image" src="img/hive.png">
                     </span>
                 </div>
-                <div class="col-sm-3 search">
+                <div class="col-sm-4 search">
                     <div class="row">
                         <div class="col-sm-9 question">
                             <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
@@ -47,14 +47,17 @@
             </div>
         </div>
 
-        <div class="row content">
-            <div class="col-sm-2 left-nav"></div>
-            <div class="col-sm-8 display">
-                <div id="chartContainer">
-                    <a href="about">About Hive</a>
+        <div class="container-fluid background">
+            <div class="row content">
+                <div class="col-sm-2 left-nav"></div>
+                <div class="col-sm-8 display">
+                    <div id="chartContainer" style="display:none">
+                        
+                    </div>
+                    <img id="placeholder" src="img/flying_bee.gif"></img>
                 </div>
+                <div class="col-sm-2 right-nav"></div>
             </div>
-            <div class="col-sm-2 right-nav"></div>
         </div>
 
         <div class="container-fluid footer"><b>HIVE</b></div>
@@ -62,45 +65,95 @@
 </body>
 
 <script>
+
+    var text = '{ "results": [' +
+    '{ "year":"2020", "month":"01", "day":"01", "y":0.5, "url":"google.com", "title":"google"},' +
+    '{ "year":"2020", "month":"01", "day":"02", "y":0.7, "url":"google.com", "title":"amazon"},' +
+    '{ "year":"2020", "month":"01", "day":"03", "y":0.3, "url":"google.com", "title":"firefox"},' +
+    '{ "year":"2020", "month":"01", "day":"04", "y":-0.2, "url":"google.com", "title":"explorer"}]}';
+
+    var chartData = JSON.parse(text).results;
+
+    for (var i = 0; i < 4; i++) {
+        chartData[i].x = new Date(chartData[i].year, chartData[i].month, chartData[i].day);
+    }
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        title: {
+            text: "Sentiment Graph"
+        },
+        axisY: {
+            maximum: 1,
+            minimum: -1,
+            title: "Sentiment"
+        },
+        axisX: {
+            title: "Time",
+            valueFormatString: "MMM DD",
+            interval: 1
+        },
+        data: [{
+            type: "line",
+            toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+
+            // dataPoints: bob[question] || bob["default"]
+
+            dataPoints: chartData
+        }]
+    });
+
+
     function askWatson() {
+        document.getElementById("chartContainer").style.display = "none"
+        document.getElementById("placeholder").style.display = ""
         var question = $("#question").val();
         question = question.toLowerCase();
 
         var base = '/search/';
         var query = base.concat(question);
+
+        chart.options.title.text = "Sentiment for " + question
+
+        // HTTP GET request to Flask server
         $.get(query, function(err, req, resp){
-            console.log(resp);
+            if (req == "success") {
+                console.log('I AM HERE')
+                results = resp.responseJSON.results;
+
+                for (var i = 0; i < results.length; i++) {
+                    results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
+                    // console.log(results[i].x);
+
+                }
+                console.log(results)
+                chart.options.data[0].dataPoints = results
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                chart.render();
+                
+            } else {
+                chart.options.data[0].dataPoints = bob["default"];
+                chart.options.data[0].dataPoints = results
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                chart.render();
+            }
+
+            
         });
 
-        var chart = new CanvasJS.Chart("chartContainer", {
-            title: {
-                text: "Sentiment for " + question
-            },
-            axisY: {
-                maximum: 1,
-                minimum: -1,
-                title: "Sentiment"
-            },
-            axisX: {
-                title: "Time",
-                valueFormatString: "MMM",
-                interval: 1,
-                intervalType: "month"
-            },
-            data: [{
-                type: "line",
-                toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+        
 
-                dataPoints: bob[question] || bob["default"]
-            }]
-        });
-
-        $('#chartContainer').css({
-            'border': 'solid black 5px'
-        });
-
-        chart.render();
     }
+
+    // console.log(results);
 
     var bob = {
         "default": [{
