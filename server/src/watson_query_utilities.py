@@ -18,6 +18,7 @@ def get_query_for_specific_day(query, year, month, day):
         filter='year::' + str(year) + ',month::' + str(month) + ',day::' + str(day)
     ).get_result()
 
+    print(my_query)
     return my_query
 
 def get_average_sentiment_score(query_results, confidence_threshold=0.01):
@@ -47,6 +48,9 @@ def get_closest_result(results, target_sentiment, confidence_threshold=0.01):
     return closest_result
 
 def get_results(query, end_date, days_prior):
+    if days_prior < 0:
+        days_prior = 0
+
     result_dictionary = {
         'query_string': query,
         'ending_date': str(end_date),
