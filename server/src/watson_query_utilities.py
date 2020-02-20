@@ -18,7 +18,6 @@ def get_query_for_specific_day(query, year, month, day):
         filter='year::' + str(year) + ',month::' + str(month) + ',day::' + str(day)
     ).get_result()
 
-    print(my_query)
     return my_query
 
 def get_average_sentiment_score(query_results, confidence_threshold=0.01):

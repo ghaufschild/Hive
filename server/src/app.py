@@ -2,7 +2,7 @@ from flask import Flask, render_template, make_response
 import os
 import time
 from datetime import date
-import watson_query_utilities
+import watson_query_utilities as watson_query
 
 
 app = Flask(__name__)
@@ -32,7 +32,7 @@ def about():
 
 @app.route('/search/<query>')
 def search(query):
-    return watson_query_utilities.get_results(query, date.today(), 7)
+    return watson_query.get_results(query, date.today(), 7)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
