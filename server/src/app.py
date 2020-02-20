@@ -4,6 +4,7 @@ import time
 from datetime import date, timedelta
 from ibm_watson import DiscoveryV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import firebase_commands
 
 
 app = Flask(__name__)
@@ -122,6 +123,7 @@ def about():
 
 @app.route('/search/<query>')
 def search(query):
+    firebase_commands.write_to_firebase("logs", "this", "is a new log")
     return getResults(query, date.today(), 7)
 
 if __name__ == '__main__':
