@@ -5,7 +5,7 @@ import src.watson_query_utilities as watson_utils
 from unittest.mock import MagicMock
 
 sample_query_result = {}
-with open('test_watson_query_utilities_sample_query_result') as json_file:
+with open('test_watson_query_utilities_sample_query_result.json') as json_file:
     sample_query_result = json.load(json_file)
 
 
