@@ -11,10 +11,10 @@ def write_to_firebase(collection, key, value):
     doc_ref = store.collection(collection)
     doc_ref.add({key:value})
 
-def get_all_documents_within_time_frame(collection, time_range = 0):
-    if time_range > 0:
+def get_all_documents_within_time_frame(collection, days_ago = 0):
+    if days_ago > 0:
         today = datetime.date.today()
-        one_day = datetime.timedelta(days=1)
+        one_day = datetime.timedelta(days = days_ago)
         yesterday = today - one_day
         time_now = datetime.datetime.now().time()
         compare_time = datetime.datetime.combine(yesterday, time_now)
