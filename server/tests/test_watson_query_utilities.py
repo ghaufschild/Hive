@@ -1,5 +1,5 @@
 # this file contains a single unit test for my_function located in server/src/example.py
-from datetime import date
+from datetime import date, timedelta
 import json
 import src.watson_query_utilities as watson_utils
 from unittest.mock import MagicMock
@@ -48,8 +48,15 @@ def test_get_closest_result_has_no_result():
 
 def test_get_results_one_day():
     test_query = "Query"
-    test_date = date.today()
+    today = date.today()
     test_days_prior = 1
+
+    days_prior = 0
+    test_date = today - timedelta(days=(days_prior - 1))
+
+    while test_date.day != 20 or test_date.month != 2 or test_date.year != 2020:
+        test_date = today - timedelta(days=(days_prior - 1))
+        days_prior += 1
 
     watson_utils.get_query_for_specific_day = MagicMock(return_value=sample_query_result)
     results = watson_utils.get_results(test_query, test_date, test_days_prior)
