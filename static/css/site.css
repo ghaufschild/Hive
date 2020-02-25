@@ -1,9 +1,12 @@
 :root {
-  --top-bottom: #373737;
-  --center: #FEBE43;
-  --left-right-1: #696969;
-  --left-right-2: #525252;
-}
+    --top-bottom: #373737;
+    --center: #FEBE43;
+    --left-right-1: #696969;
+    --left-right-2: #525252;
+    --arrow-size: 17px;
+    --arrow-height: 23px;
+    --arrow-margin: 3px;
+  }
 
 html, body {
     height: 100%;
@@ -30,7 +33,7 @@ html, body {
 }
 
 .title {
-    margin: 10px 20px;
+    /*margin: 10px 20px;*/
     text-align: left;
 }
 
@@ -47,10 +50,10 @@ html, body {
 }
 
 .search {
-    margin: 10px 20px;
+    /*margin: 10px 20px;*/
     text-align: right;
     padding-top: 20px;
-    padding-right: 100px;
+    /*padding-right: 100px;*/
 }
 
 .display {
@@ -60,12 +63,7 @@ html, body {
 }
 
 .left-nav, .right-nav {
-    background: repeating-linear-gradient(
-        45deg,
-        var(--left-right-1),
-        var(--left-right-1) 25px,
-        var(--left-right-2) 25px,
-        var(--left-right-2) 50px);
+    background: white;
 }
 
 .footer {
@@ -98,13 +96,62 @@ html, body {
     margin-left: -125px;
 }
 
-.trending li h4 {
+.trending h4{
     display: inline;
     text-align: center;
-
 }
 
-.trending ul {
-    list-style: none;
-    padding-left: 0px;
+.trending .up{
+    color: #005600;
+}
+
+.trending .up .col-3:after {
+    content: "";
+    background: url(../img/greenArrow.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending .down{
+    color: #aa0000;
+}
+
+.trending .down .col-3:after {
+    content: "";
+    background: url(../img/redArrow.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending .flat{
+    color: gray;
+}
+
+.trending .flat .col-3:after {
+    content: "";
+    background: url(../img/greyLine.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending hr {
+    border: none;
+    height: 2px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
