@@ -123,7 +123,7 @@ def about():
 
 @app.route('/search/<query>')
 def search(query):
-    firebase_commands.write_to_firebase("logs", "this", "is a new log")
+    firebase_commands.write_query_to_firebase(query)
     return getResults(query, date.today(), 7)
 
 if __name__ == '__main__':
