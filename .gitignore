@@ -2,6 +2,8 @@
 .DS_Store
 # Static HTML files
 static/*.html
+static/css/test.css
+
 # Logs
 logs
 *.log
