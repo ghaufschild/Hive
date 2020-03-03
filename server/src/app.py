@@ -126,5 +126,23 @@ def search(query):
     firebase_commands.write_query_to_firebase(query)
     return getResults(query, date.today(), 7)
 
+@app.route('/trending')
+def trending():
+    queries = firebase_commands.get_trending()
+
+    trending = []
+
+    for q in queries:
+        results = getResults(q, date.today(), 7)
+
+        if len(results['results']) > 1:
+            results['change'] = results['results'][-1] - results['results'][-2]
+        else:
+            results['change'] = 0
+
+        trending.append(results)
+
+    return {'results': trending}
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))

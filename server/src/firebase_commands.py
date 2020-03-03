@@ -32,8 +32,10 @@ def get_all_documents_within_time_frame(collection, days_ago = 0):
     else:
         return store.collection(collection).stream()
         
-def get_trending(queries):
-
+def get_trending(days = 1):
+    
+    queries = get_all_documents_within_time_frame('queries', days)
+    
     counts = defaultdict(int)
 
     for q in queries:
@@ -43,4 +45,4 @@ def get_trending(queries):
 
     trending = sorted(counts, key=counts.get, reverse=True)
 
-    return trending
+    return trending[:10]
