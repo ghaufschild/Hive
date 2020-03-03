@@ -155,3 +155,11 @@ html, body {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+.trending .hasData {
+    cursor: pointer;
+}
+
+.trending .noData {
+    cursor: wait;
+}

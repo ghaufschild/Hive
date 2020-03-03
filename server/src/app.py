@@ -98,6 +98,32 @@ def getResults(query, end_date, days_prior):
 
     return result_dictionary
 
+def formatTrending(trendingList):
+    for topic in trending:
+        html += '<div class="row '
+        if topic.change > 0:
+            html += 'up'
+        else if topic.change < 0
+            html += 'down'
+        else
+            html += 'flat'
+        html +='">
+
+        html += '<div class="col-9 text-left">'
+        html += '<h4>' + topic.title + ' ' + topic.change + '</h4>'
+        html += '</div><div class="col-3 text-left"></div></div>'
+
+    return html
+    
+def getTrending():
+    
+    #Get trending list (looking for max 10)
+    
+
+
+    #Get default to get up to size
+
+
 def format_server_time():
   server_time = time.localtime()
   return time.strftime("%I:%M:%S %p", server_time)
@@ -105,7 +131,9 @@ def format_server_time():
 @app.route('/')
 def index():
     context = { 'server_time': format_server_time() }
-    template = render_template('index.html', context=context)
+    trendingList = getTrending()
+    trending = formatTrending(trendingList)
+    template = render_template('index.html', context=context, trending=trending)
     response = make_response(template)
     response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
 

@@ -57,44 +57,27 @@
                 <div class="col-4 left-nav">
                     <div class="col-12 trending">
                         <h2>Trending</h2>
-                        <div class="row up">
-                            <div class="col-9 text-left">
-                                <h4>Trump .05</h4>
+                        <div id="trending">
+                            <div class="row up hasData" onclick="askBob('Trump')">
+                                <div class="col-9 text-left">
+                                    <h4>Trump .05</h4>
+                                </div>
+                                <div class="col-3 text-left"></div>
                             </div>
-                            <div class="col-3 text-left"></div>
-                        </div>
-                        <hr>
-                        <div class="row flat">
-                            <div class="col-9 text-left">
-                                <h4>Bernie .00</h4>
+                            <hr>
+                            <div class="row flat hasData" onclick="askBob('Bernie')">
+                                <div class="col-9 text-left">
+                                    <h4>Bernie .00</h4>
+                                </div>
+                                <div class="col-3 text-left"></div>
                             </div>
-                            <div class="col-3 text-left"></div>
-                        </div>
-                        <hr>
-                        <div class="row down">
-                            <div class="col-9 text-left">
-                                <h4>Coronavirus .15</h4>
+                            <hr>
+                            <div class="row down noData">
+                                <div class="col-9 text-left">
+                                    <h4>Coronavirus .15</h4>
+                                </div>
+                                <div class="col-3 text-left"></div>
                             </div>
-                            <div class="col-3 text-left"></div>
-                        </div>
-                        <hr>
-                        <div class="row up">
-                            <div class="col-9 text-left">
-                                <h4>Coronavirus .15</h4>
-                            </div>
-                            <div class="col-3 text-left"></div>
-                        </div>                        <hr>
-                        <div class="row flat">
-                            <div class="col-9 text-left">
-                                <h4>Coronavirus .15</h4>
-                            </div>
-                            <div class="col-3 text-left"></div>
-                        </div>                        <hr>
-                        <div class="row down">
-                            <div class="col-9 text-left">
-                                <h4>Coronavirus .15</h4>
-                            </div>
-                            <div class="col-3 text-left"></div>
                         </div>
                     </div>
                 </div>
@@ -108,42 +91,80 @@
 </body>
 
 <script>
-    var text = '{ "results": [' +
-        '{ "year":"2020", "month":"01", "day":"01", "y":0.5, "url":"google.com", "title":"google"},' +
-        '{ "year":"2020", "month":"01", "day":"02", "y":0.7, "url":"google.com", "title":"amazon"},' +
-        '{ "year":"2020", "month":"01", "day":"03", "y":0.3, "url":"google.com", "title":"firefox"},' +
-        '{ "year":"2020", "month":"01", "day":"04", "y":-0.2, "url":"google.com", "title":"explorer"}]}';
+    var chartData = "";
 
-    var chartData = JSON.parse(text).results;
-
-    for (var i = 0; i < 4; i++) {
-        chartData[i].x = new Date(chartData[i].year, chartData[i].month, chartData[i].day);
+    function titleCase(str) {
+        var splitStr = str.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+        }
+        // Directly return the joined string
+        return splitStr.join(' ');
     }
 
-    var chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,
-        title: {
-            text: "Sentiment Graph"
-        },
-        axisY: {
-            maximum: 1,
-            minimum: -1,
-            title: "Sentiment"
-        },
-        axisX: {
-            title: "Time",
-            valueFormatString: "MMM DD",
-            interval: 1
-        },
-        data: [{
-            type: "line",
-            toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+    function getTrending() {
+        var query = "/trending";
+        $.get(query, function (err, req, resp) {
+            if (req == "success") {
+                var trending = resp.responseJSON.results;
+                var trendingHasData = false;
+                var defaultTopic = "";
+                var html = "";
+                for (var topic in trending) {
+                    var currTopic = trending[topic];
+                    var title = currTopic.query_string;
+                    var change = currTopic.change;
+                    if(change == 0) {
+                        change = 0.00;
+                    }
+                    for (var i = 0; i < currTopic.results.length; i++) {
+                        currTopic.results[i].x = new Date(currTopic.results[i].year, currTopic.results[i].month -
+                            1, currTopic.results[i].day);
+                        // console.log(results[i].x);
+                    }
+                    html += '<hr><div class="row ';
 
-            // dataPoints: bob[question] || bob["default"]
+                    if (change > 0) {
+                        html += 'up';
+                    } else if (change < 0) {
+                        html += 'down';
+                    } else {
+                        html += 'flat';
+                    }
 
-            dataPoints: chartData
-        }]
-    });
+                    if (currTopic.results.length > 1) {
+                        html += ' hasData " onclick="askBob(\'' + title + '\')';
+                        if (!trendingHasData) {
+                            trendingHasData = true;
+                            defaultTopic = title;
+                            bob.push(currTopic);
+                        }
+                    } else {
+                        html += ' noData';
+                    }
+                    html += '">';
+
+                    html += '<div class="col-9 text-left">'
+                    html += '<h4>' + titleCase(title) + ' ' + currTopic.change + '</h4>'
+                    html += '</div><div class="col-3 text-left"></div></div>'
+                }
+                $(html).appendTo("#trending");
+
+
+                if (trendingHasData) {
+                    askBob(defaultTopic);
+                }
+
+            } else {
+                html = "No data found";
+                $("#trending").html(html);
+            }
+        });
+    }
+
+    getTrending();
 
     function askWatson() {
         document.getElementById("chartContainer").style.display = "none"
@@ -189,6 +210,49 @@
         });
     }
 
+    function askBob(topic) {
+        document.getElementById("chartContainer").style.display = "none"
+        document.getElementById("placeholder").style.display = ""
+        $("#chartContainer").empty();
+        var chart = createChart();
+        chart.options.title.text = "Sentiment for " + topic
+
+        console.log(topic);
+        chart.options.data[0].dataPoints = bob[topic];
+        $('#chartContainer').css({
+            'border': 'solid black 5px'
+        });
+        document.getElementById("chartContainer").style.display = ""
+        document.getElementById("placeholder").style.display = "none"
+        chart.render();
+    }
+
+
+    function createChart(chartData) {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            title: {
+                text: "Sentiment Graph"
+            },
+            axisY: {
+                maximum: 1,
+                minimum: -1,
+                title: "Sentiment"
+            },
+            axisX: {
+                title: "Time",
+                valueFormatString: "MMM DD",
+                interval: 1
+            },
+            data: [{
+                type: "line",
+                toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+
+                // dataPoints: bob[question] || bob["default"]
+            }]
+        });
+        return chart;
+    }
     // console.log(results);
 
     var bob = {
@@ -238,6 +302,92 @@
         "patriots": [{
                 "x": new Date(2012, 00, 1),
                 "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": -0.6
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": -0.8
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": 0.8
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": 0.7
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": 0.1
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": -0.2
+            }
+        ],
+        "Trump": [{
+                "x": new Date(2012, 00, 1),
+                "title": "fuck",
+                "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+                "y": -0.6
+            },
+            {
+                "x": new Date(2012, 01, 1),
+                "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+                "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+                "y": 0.2
+            },
+            {
+                "x": new Date(2012, 02, 1),
+                "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+                "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+                "y": -0.8
+            },
+            {
+                "x": new Date(2012, 03, 1),
+                "title": "NASA's TESS spacecraft reports its first exoplanet",
+                "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+                "y": 0.8
+            },
+            {
+                "x": new Date(2012, 04, 1),
+                "title": "Space Shuttle Discovery",
+                "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+                "y": 0.7
+            },
+            {
+                "x": new Date(2012, 05, 1),
+                "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+                "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+                "y": 0.1
+            },
+            {
+                "x": new Date(2012, 06, 1),
+                "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+                "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+                "y": -0.2
+            }
+        ],
+        "Bernie": [{
+                "x": new Date(2012, 00, 1),
+                "title": "yeet",
                 "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
                 "y": -0.6
             },
