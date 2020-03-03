@@ -1,0 +1,149 @@
+{
+   "matching_results":1,
+   "session_token":"1_dJGtXtLdLM59Z1f5_aQq7dMCbL",
+   "results":[
+      {
+         "id":"ce6af094-5a4e-4301-a839-af905208cea6",
+         "result_metadata":{
+            "confidence":0.2084252734491108,
+            "score":2.050411
+         },
+         "body":"Sample Body",
+         "enriched_body":{
+            "sentiment":{
+               "document":{
+                  "score":-0.553604,
+                  "label":"negative"
+               }
+            },
+            "emotion":{
+               "document":{
+                  "emotion":{
+                     "disgust":0.177818,
+                     "joy":0.565515,
+                     "anger":0.163678,
+                     "fear":0.16522,
+                     "sadness":0.551874
+                  }
+               }
+            },
+            "concepts":[
+               {
+                  "text":"China",
+                  "relevance":0.945563,
+                  "dbpedia_resource":"http://dbpedia.org/resource/China"
+               },
+               {
+                  "text":"Princess Cruises",
+                  "relevance":0.878117,
+                  "dbpedia_resource":"http://dbpedia.org/resource/Princess_Cruises"
+               },
+               {
+                  "text":"Pacific",
+                  "relevance":0.866934,
+                  "dbpedia_resource":"http://dbpedia.org/resource/Pacific_(ship)"
+               }
+            ],
+            "categories":[
+               {
+                  "score":0.958654,
+                  "label":"/health and fitness/disease/epidemic"
+               },
+               {
+                  "score":0.91211,
+                  "label":"/health and fitness/disease/cold and flu"
+               }
+            ],
+            "keywords":[
+               {
+                  "text":"high relevance",
+                  "relevance":0.640152,
+                  "count":2
+               },
+               {
+                  "text":"low relevance",
+                  "relevance":0.585948,
+                  "count":1
+               }
+            ]
+         },
+         "enriched_title":{
+            "sentiment":{
+               "document":{
+                  "score":-0.985702,
+                  "label":"negative"
+               }
+            },
+            "emotion":{
+               "document":{
+                  "emotion":{
+                     "disgust":0.211562,
+                     "joy":0.008572,
+                     "anger":0.533021,
+                     "fear":0.258056,
+                     "sadness":0.362595
+                  }
+               }
+            },
+            "concepts":[
+               {
+                  "text":"Plain White T's",
+                  "relevance":0.841454,
+                  "dbpedia_resource":"http://dbpedia.org/resource/Plain_White_T's"
+               },
+               {
+                  "text":"Management",
+                  "relevance":0.763351,
+                  "dbpedia_resource":"http://dbpedia.org/resource/Management"
+               }
+            ],
+            "categories":[
+               {
+                  "score":0.987497,
+                  "label":"/health and fitness/disease/epidemic"
+               }
+            ],
+            "keywords":[
+               {
+                  "text":"director calls",
+                  "relevance":0.998073,
+                  "count":1
+               },
+               {
+                  "text":"global leaders",
+                  "relevance":0.992061,
+                  "count":1
+               },
+               {
+                  "text":"stigma",
+                  "relevance":0.613711,
+                  "count":1
+               },
+               {
+                  "text":"coronavirus epidemic",
+                  "relevance":0.19001,
+                  "count":1
+               },
+               {
+                  "text":"hate",
+                  "relevance":0.042738,
+                  "count":1
+               }
+            ]
+         },
+         "url":"https://www.cnbc.com/2020/02/15/article.html",
+         "year":2020,
+         "extracted_metadata":{
+            "sha1":"68d1cee94fb4b9523f93c99ececa8da3bf081b3b",
+            "filename":"extracted-metadat-filename",
+            "file_type":"json"
+         },
+         "title":"Sample Title",
+         "day":15,
+         "month":2
+      }
+   ],
+   "retrieval_details":{
+      "document_retrieval_strategy":"untrained"
+   }
+}
