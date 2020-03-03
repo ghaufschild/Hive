@@ -1,6 +1,7 @@
 :root {
     --top-bottom: #373737;
-    --center: #FEBE43;
+    --center-1: #FEBE43;
+    --center-2: #D8A82A;
     --left-right-1: #696969;
     --left-right-2: #525252;
     --arrow-size: 17px;
@@ -41,7 +42,7 @@ html, body {
     /*font-family: Marker Felt, fantasy;*/
     font-variant: small-caps;
     font-size: 3.2em;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 #logo {
@@ -59,7 +60,14 @@ html, body {
 .display {
     border-left: 5px solid white;
     border-right: 5px solid white;
-    background-color: var(--center);
+    background-color: var(--center-1);
+    /* background: repeating-linear-gradient(
+        45deg,
+        var(--center-1),
+        var(--center-1) 20px,
+        var(--center-2) 20px,
+        var(--center-2) 40px
+    ); */
 }
 
 .left-nav, .right-nav {
@@ -154,4 +162,13 @@ html, body {
     background-color: #333; /* Modern Browsers */
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+#remove {
+    color: white;
+    font-weight: 900;
+}
+
+.btn-link {
+    text-decoration: none !important
 }
