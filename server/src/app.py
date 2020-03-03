@@ -3,14 +3,14 @@ import os
 import time
 from datetime import date
 import watson_query_utilities
-
+from scrape_cnbc import scrape_cnbc
 
 app = Flask(__name__)
 
 
 def format_server_time():
-  server_time = time.localtime()
-  return time.strftime("%I:%M:%S %p", server_time)
+    server_time = time.localtime()
+    return time.strftime("%I:%M:%S %p", server_time)
 
 @app.route('/')
 def index():
@@ -29,6 +29,10 @@ def about():
     response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
 
     return response
+
+@app.route('/uploaddocuments/<day>'):
+def uploaddocuments(day):
+    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
 
 @app.route('/search/<query>')
 def search(query):
