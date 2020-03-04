@@ -2,12 +2,24 @@ from datetime import date, timedelta
 from ibm_watson import DiscoveryV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
-discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
-discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
+SOURCE = 'REDDIT' #'CNBC'
 
-env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
-collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
+if SOURCE == 'CNBC':
+    authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
+    discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
+    discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
+
+    env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
+    collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
+elif SOURCE == 'REDDIT':
+    authenticator = IAMAuthenticator("6j66m1ZJdM6KYMYj8J074qXjWE6FLqsLG4XpA8Bm5Wog")
+    discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
+    discovery.set_service_url('https://api.us-south.discovery.watson.cloud.ibm.com/instances/e3a97512-2f2e-4ff6-88c3-2255a1e6f56d')
+
+    env_id = '6afed5c1-e09a-4407-bd3a-2659124616af'
+    collection_id = 'afc340a2-57dc-486c-b471-9b687e2505c4'
+else:
+    raise SystemError
 
 def get_query_for_specific_day(query, year, month, day):
     my_query = discovery.query(
@@ -20,16 +32,17 @@ def get_query_for_specific_day(query, year, month, day):
 
     return my_query
 
-def get_average_sentiment_score(query_results, confidence_threshold=0.01):
+def get_average_sentiment_score(query_results, confidence_threshold=0.1):
     total_items = len(query_results['results'])
     if total_items == 0:
         return None
-    
-    sentiment_sum = sum(doc['enriched_body']['sentiment']['document']['score'] for doc in query_results['results'] if doc['result_metadata']['confidence'] > confidence_threshold)
-    
-    return sentiment_sum/total_items
 
-def get_closest_result(results, target_sentiment, confidence_threshold=0.01):
+    confidence_sum = sum(doc['result_metadata']['confidence'] for doc in query_results['results'])
+    sentiment_sum = sum(doc['enriched_body']['sentiment']['document']['score']*doc['result_metadata']['confidence'] for doc in query_results['results'] if doc['result_metadata']['confidence'] > confidence_threshold)
+    
+    return sentiment_sum/confidence_sum/total_items
+
+def get_closest_result(results, target_sentiment, confidence_threshold=0.1):
     closest_result = None
 
     closest_distance = 5
