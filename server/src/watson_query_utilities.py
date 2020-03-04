@@ -31,7 +31,7 @@ class Hive(object):
 
         return my_query
 
-    def get_average_sentiment_score(self, query_results, confidence_threshold=0.1):
+    def get_average_sentiment_score(self, query_results, confidence_threshold=0.2):
         query_results['results'] = list(filter(lambda doc: doc['result_metadata']['confidence'] > confidence_threshold, query_results['results']))
         total_items = len(query_results['results'])
         if total_items == 0:
@@ -46,7 +46,7 @@ class Hive(object):
         
         return sentiment_sum/confidence_sum/total_items
 
-    def get_closest_result(self, results, target_sentiment, confidence_threshold=0.1):
+    def get_closest_result(self, results, target_sentiment, confidence_threshold=0.2):
         closest_result = None
 
         closest_distance = float('inf')
