@@ -4,7 +4,7 @@ import json
 from bs4 import  BeautifulSoup
 from ibm_watson import DiscoveryV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from datetime import date
+from datetime import date, timedelta
 
 def scrape_cnbc(day):
     authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
@@ -57,8 +57,15 @@ def scrape_cnbc(day):
         discovery.update_document(env_id, collection_id, doc['id'], file=json.dumps(new_doc), filename=doc['extracted_metadata']['filename'], file_content_type='application/json')
     '''
 if __name__ == '__main__':
-    reset = True
+
+    reset = False
     if reset:
+        authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
+        discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
+        discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
+
+        env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
+        collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
         for i in range(int(1000/50)):
             my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
             if len(my_query) == 0:
@@ -66,4 +73,8 @@ if __name__ == '__main__':
             for doc in my_query['results']:
                 print(doc['title'])
                 discovery.delete_document(env_id, collection_id, doc['id'])
-    #scrape_cnbc(date.today())
+    scrape_cnbc(date.today() - timedelta(days=2))
+    scrape_cnbc(date.today() - timedelta(days=3))
+    scrape_cnbc(date.today() - timedelta(days=4))
+    scrape_cnbc(date.today() - timedelta(days=5))
+    scrape_cnbc(date.today() - timedelta(days=6))

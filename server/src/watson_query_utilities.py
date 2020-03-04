@@ -33,19 +33,24 @@ def get_query_for_specific_day(query, year, month, day):
     return my_query
 
 def get_average_sentiment_score(query_results, confidence_threshold=0.1):
+    query_results['results'] = list(filter(lambda doc: doc['result_metadata']['confidence'] > confidence_threshold, query_results['results']))
     total_items = len(query_results['results'])
     if total_items == 0:
         return None
 
+    for doc in query_results['results']:
+        if not 'enriched_body' in doc:
+            print(doc)
+
     confidence_sum = sum(doc['result_metadata']['confidence'] for doc in query_results['results'])
-    sentiment_sum = sum(doc['enriched_body']['sentiment']['document']['score']*doc['result_metadata']['confidence'] for doc in query_results['results'] if doc['result_metadata']['confidence'] > confidence_threshold)
+    sentiment_sum = sum(doc['enriched_body']['sentiment']['document']['score']*doc['result_metadata']['confidence'] for doc in query_results['results'])
     
     return sentiment_sum/confidence_sum/total_items
 
 def get_closest_result(results, target_sentiment, confidence_threshold=0.1):
     closest_result = None
 
-    closest_distance = 5
+    closest_distance = float('inf')
 
     for current_result in results['results']:
         if current_result['result_metadata']['confidence'] > confidence_threshold:
@@ -60,9 +65,6 @@ def get_closest_result(results, target_sentiment, confidence_threshold=0.1):
     return closest_result
 
 def get_results(query, end_date, days_prior):
-    if days_prior < 0:
-        days_prior = 0
-
     result_dictionary = {
         'query_string': query,
         'ending_date': str(end_date),

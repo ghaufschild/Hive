@@ -21,7 +21,6 @@ reddit = praw.Reddit(client_id='JwuaAJFEkxPH6A',
                      username='hivebot5914')
 
 reset = True
-
 if reset:
     for i in range(int(1000/50)):
         my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
@@ -36,7 +35,8 @@ character_limit = 50000
 subreddit_names = ['inthenews', 'UpliftingNews', 'news', 'worldnews']
 for subreddit_name in subreddit_names:
     subreddit = reddit.subreddit(subreddit_name)
-    for post in subreddit.top('week', limit=int(100/len(subreddit_names))):
+    extra = 0
+    for post in subreddit.top('week', limit=(int(1000/len(subreddit_names))+extra)):
         post_title = remove_non_ascii(post.title)
         post_url = post.shortlink
         print(post_title, post_url)
@@ -61,5 +61,8 @@ for subreddit_name in subreddit_names:
             'score': post_score,
             'upvote_ratio': post_upvote_ratio,
         }
-        doc_id = post_url
-        discovery.update_document(env_id, collection_id, doc_id, file=json.dumps(document), filename='-'.join(post_title.split(' ')), file_content_type='application/json')
+        doc_id = str(int(post_time))
+        if len(post_body) >= 1:
+            discovery.update_document(env_id, collection_id, doc_id, file=json.dumps(document), filename='-'.join(post_title.split(' ')), file_content_type='application/json')
+        else:
+            extra += 1
