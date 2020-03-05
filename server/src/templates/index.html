@@ -92,69 +92,72 @@
                                         <div class="col-3 text-left"></div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    </br>
-                                    <!-- <h2>Advanced Search</h2><hr style="height:1px;"> -->
-                                    <form class="text-left">
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                </br>
+                                <!-- <h2>Advanced Search</h2><hr style="height:1px;"> -->
+                                <form class="text-left">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputEmail1">Date Range</label>
+                                            <input type="text" name="dates" class="form-control pull-right" />
+                                            <script>
+                                                $(function () {
+                                                    $('input[name="dates"]').daterangepicker({
+                                                        startDate: moment(),
+                                                        endDate: moment().add(2, 'day')
+                                                    });
+                                                })
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="form-wrapper">
                                         <div class="form-row">
                                             <div class="form-group col-md-9">
-                                                <label for="exampleInputEmail1">Date Range</label>
-                                                <input type="text" name="dates" class="form-control pull-right" />
+                                                <label for="topic">Topic</label>
+                                                <input type="string" class="form-control" id="topic" placeholder="Enter a topic here...">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="relevancy-threshold">RT</label>
+                                                <select type="number" class="form-control 1-100" id="relevancy-threshold"></select>
                                                 <script>
                                                     $(function () {
-                                                        $('input[name="dates"]').daterangepicker({
-                                                            startDate: moment(),
-                                                            endDate: moment().add(2, 'day')
-                                                        });
-                                                    })
+                                                        var $select = $(".1-100");
+                                                        $select.empty();
+                                                        for (i = 1; i <= 100; i++) {
+                                                            $select.append($('<option></option>').val(i).html(i))
+                                                        }
+                                                    });
                                                 </script>
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <label>&nbsp;</label>
-                                                <button type="submit" class="create-entry btn btn-block btn-outline-success" onclick="createEntry(event)">
-                                                    <span id="create">Add Topic</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="form-wrapper">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-9">
-                                                    <label for="topic">Topic</label>
-                                                    <input type="string" class="form-control" id="topic" placeholder="Enter a topic here...">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label for="relevancy-threshold">RT</label>
-                                                    <select type="number" class="form-control 1-100" id="relevancy-threshold"></select>
-                                                    <script>
-                                                        $(function () {
-                                                            var $select = $(".1-100");
-                                                            $select.empty();
-                                                            for (i = 1; i <= 100; i++) {
-                                                                $select.append($('<option></option>').val(i).html(
-                                                                    i))
-                                                            }
-                                                        });
-                                                    </script>
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <!-- <label for="inputPassword4">&nbsp;</label>
+                                            <div class="form-group col-md-1">
+                                                <!-- <label for="inputPassword4">&nbsp;</label>
                                                 <button class="btn btn-block btn-link" onclick="removeEntry(event)" disabled>&#10060;</button> -->
-                                                </div>
                                             </div>
                                         </div>
-                                    </form>
-                                    <button type="submit" class="btn btn-block btn-success" onclick="askWatson()" disabled>Search</button>
+                                    </div>
+                                </form>
+                                <div class="form-group col-md-6">
+                                        <label>&nbsp;</label>
+                                        <button type="submit" class="create-entry btn btn-block btn-outline-success" onclick="createEntry(event)">
+                                            <span id="create">Add Topic</span>
+                                        </button>
+                                </div>
+                                <div class="form-group col-md-6">
+                                        
+                                <button type="submit" class="btn btn-block btn-info" onclick="askWatson()" disabled>Search</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="container-fluid footer">
-                <b>HIVE</b>
-            </div>
         </div>
+
+        <div class="container-fluid footer">
+            <b>HIVE</b>
+        </div>
+    </div>
 </body>
 
 <script src="js/bob.js"></script>

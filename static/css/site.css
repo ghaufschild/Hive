@@ -172,6 +172,14 @@ html, body {
     cursor: wait;
 }
 
+.form-group label {
+    margin-bottom: 0px;
+}
+
+.form-group .disabled {
+    cursor: not-allowed;
+}
+
 #remove {
     color: white;
     font-weight: 900;
