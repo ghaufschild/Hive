@@ -78,3 +78,5 @@ env/
 
 # python cache
 __pycache__/
+
+hive-5914-firebase-adminsdk*
