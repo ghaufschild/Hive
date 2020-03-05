@@ -3,15 +3,15 @@ import os
 import time
 from datetime import date, timedelta
 import firebase_commands
-import watson_query_utilities as watson_query
+from watson_query_utilities import Hive
 
 
+hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
 
-
 def format_server_time():
-  server_time = time.localtime()
-  return time.strftime("%I:%M:%S %p", server_time)
+    server_time = time.localtime()
+    return time.strftime("%I:%M:%S %p", server_time)
 
 @app.route('/')
 def index():
@@ -31,10 +31,15 @@ def about():
 
     return response
 
+#from scrape_cnbc import scrape_cnbc
+#@app.route('/uploaddocuments/<day>'):
+#def uploaddocuments(day):
+#    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
+
 @app.route('/search/<query>')
 def search(query):
     firebase_commands.write_query_to_firebase(query)
-    return watson_query.get_results(query, date.today(), 7)
+    return hive.get_results(query, date.today(), 7)
 
 @app.route('/trending')
 def trending():
