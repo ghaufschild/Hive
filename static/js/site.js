@@ -16,14 +16,13 @@ function getTrending() {
         resp) {
         if (req == "success") {
             var trending = resp.responseJSON.results;
-            var trendingHasData = false;
             var defaultTopic = "";
             var html = "";
             for (var topic in trending) {
                 var currTopic = trending[topic];
                 var title = currTopic.query_string;
                 var
-                    change = currTopic.change;
+                    change = Math.round(currTopic.change * 100) / 100;
                 if (change == 0) {
                     change = 0.00;
                 }
@@ -41,26 +40,23 @@ function getTrending() {
 
                 if (currTopic.results.length > 1) {
                     html += ' hasData " onclick="askBob(\'' + title + '\')';
-                    if (!trendingHasData) {
-                        trendingHasData = true;
                         defaultTopic = title;
-                        bob['default'].push(currTopic);
-                    }
+                        bob[title] = currTopic.results;
                 } else {
                     html += ' noData';
                 }
                 html += '">';
 
                 html += '<div class="col-9 text-left">'
-                html += '<h4>' + titleCase(title) + ' ' + currTopic.change + '</h4>'
+                html += '<h4>' + titleCase(title) + ' ' + change + '</h4>'
                 html += '</div><div class="col-3 text-left"></div></div>'
             }
             $(html).appendTo("#trending");
 
 
-            if (trendingHasData) {
+            /*if (trendingHasData) {
                 askBob(defaultTopic);
-            }
+            }*/
 
         } else {
             html = "No data found";
@@ -75,6 +71,50 @@ function askWatson() {
     document.getElementById("chartContainer").style.display = "none"
     document.getElementById("placeholder").style.display = ""
     var question = $("#question").val();
+    question = question.toLowerCase();
+
+    var base = '/search/';
+    var query = base.concat(question);
+    var chart = createChart();
+    chart.options.title.text = "Sentiment for " + question
+
+    // HTTP GET request to Flask server
+    $.get(query, function (err, req, resp) {
+        if (req == "success") {
+            console.log('I AM HERE')
+            results = resp.responseJSON.results;
+
+            for (var i = 0; i < results.length; i++) {
+                results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
+                // console.log(results[i].x);
+
+            }
+            console.log(results)
+            chart.options.data[0].dataPoints = results
+            $('#chartContainer').css({
+                'border': 'solid black 5px'
+            });
+            document.getElementById("chartContainer").style.display = ""
+            document.getElementById("placeholder").style.display = "none"
+            chart.render();
+
+        } else {
+            chart.options.data[0].dataPoints = bob["default"];
+            chart.options.data[0].dataPoints = results
+            $('#chartContainer').css({
+                'border': 'solid black 5px'
+            });
+            document.getElementById("chartContainer").style.display = ""
+            document.getElementById("placeholder").style.display = "none"
+            chart.render();
+        }
+    });
+}
+
+function askTrending(question) {
+    document.getElementById("chartContainer").style.display = "none"
+    document.getElementById("placeholder").style.display = ""
+    
     question = question.toLowerCase();
 
     var base = '/search/';
