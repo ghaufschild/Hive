@@ -4,7 +4,7 @@ import time
 from datetime import date
 from watson_query_utilities import Hive
 
-hive = Hive(source='reddit')
+hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
 
 def format_server_time():

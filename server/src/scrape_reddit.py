@@ -20,7 +20,7 @@ reddit = praw.Reddit(client_id='JwuaAJFEkxPH6A',
                      user_agent='scraper by /u/hivebot5914',
                      username='hivebot5914')
 
-reset = True
+reset = False
 if reset:
     for i in range(int(1000/50)):
         my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
@@ -36,7 +36,7 @@ subreddit_names = ['inthenews', 'UpliftingNews', 'news', 'worldnews']
 for subreddit_name in subreddit_names:
     subreddit = reddit.subreddit(subreddit_name)
     extra = 0
-    for post in subreddit.top('week', limit=(int(1000/len(subreddit_names))+extra)):
+    for post in subreddit.top('day', limit=(int(250/len(subreddit_names))+extra)):
         post_title = remove_non_ascii(post.title)
         post_url = post.shortlink
         print(post_title, post_url)

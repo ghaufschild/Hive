@@ -58,7 +58,7 @@ def scrape_cnbc(day):
     '''
 if __name__ == '__main__':
 
-    reset = False
+    reset = True
     if reset:
         authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
         discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
@@ -66,15 +66,16 @@ if __name__ == '__main__':
 
         env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
         collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
+
+        delete_docs = []
         for i in range(int(1000/50)):
-            my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
+            my_query = discovery.query(env_id, collection_id, query='*.*', count=50, offset=i*50).get_result()
             if len(my_query) == 0:
                 break
             for doc in my_query['results']:
-                print(doc['title'])
-                discovery.delete_document(env_id, collection_id, doc['id'])
-    scrape_cnbc(date.today() - timedelta(days=2))
-    scrape_cnbc(date.today() - timedelta(days=3))
-    scrape_cnbc(date.today() - timedelta(days=4))
-    scrape_cnbc(date.today() - timedelta(days=5))
-    scrape_cnbc(date.today() - timedelta(days=6))
+                if doc['month'] != 3 and (not (doc['month'] == 2 and doc['day'] >= 28)):
+                    print(doc['title'], doc['month'], doc['day'])
+                    delete_docs.append(doc['id'])
+        for doc_id in delete_docs:
+            discovery.delete_document(env_id, collection_id, doc_id)
+    scrape_cnbc(date.today())
