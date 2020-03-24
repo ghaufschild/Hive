@@ -1,8 +1,10 @@
 from flask import Flask, render_template, make_response
 import os
 import time
-from datetime import date
+from datetime import date, timedelta
+import firebase_commands
 from watson_query_utilities import Hive
+
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
@@ -29,14 +31,45 @@ def about():
 
     return response
 
+
 #from scrape_cnbc import scrape_cnbc
 #@app.route('/uploaddocuments/<day>'):
 #def uploaddocuments(day):
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
+@app.route('/testing')
+def testing():
+    queries = firebase_commands.get_trending()
+
+    trending = []
+
+    for q in queries:
+        results = hive.get_results(q, date.today(), 7)
+        trending.append(results)
+
+    return {'results': trending}
 
 @app.route('/search/<query>')
 def search(query):
+    firebase_commands.write_query_to_firebase(query)
     return hive.get_results(query, date.today(), 7)
+
+@app.route('/trending')
+def trending():
+    queries = firebase_commands.get_trending()
+
+    trending = []
+
+    for q in queries:
+        results = hive.get_results(q, date.today(), 7)
+
+        if len(results['results']) > 1:
+            results['change'] = results['results'][-1]['y'] - results['results'][-2]['y']
+        else:
+            results['change'] = 0
+
+        trending.append(results)
+
+    return {'results': trending}
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
