@@ -22,7 +22,7 @@ class DataPool(object):
                 collection_id = 'afc340a2-57dc-486c-b471-9b687e2505c4'
             self.discoverers.append({'discovery': discovery, 'env_id': env_id, 'collection_id': collection_id})
 
-    def get_query_for_specific_day(self, query, year, month, day):
+    def get_query_for_specific_day(self, query, year, month, day, confidence_threshold=0.03):
         results = []
         for discoverer in self.discoverers:
             discovery = discoverer['discovery']
@@ -31,19 +31,19 @@ class DataPool(object):
             my_query = discovery.query(
                 env_id,
                 collection_id,
-                natural_language_query=query,
+                query=query,
                 count=50,
                 filter='year::' + str(year) + ',month::' + str(month) + ',day::' + str(day)
             ).get_result()
             results.extend(my_query['results'])
+        results = list(filter(lambda doc: doc['result_metadata']['confidence'] > confidence_threshold, results))
         return results
 
 class Hive(object):
     def __init__(self, sources):
         self.datapool = DataPool(sources=sources)
 
-    def get_average_sentiment_score(self, results, confidence_threshold=0.03):
-        results = list(filter(lambda doc: doc['result_metadata']['confidence'] > confidence_threshold, results))
+    def get_average_sentiment_score(self, results):
         total_items = len(results)
         if total_items == 0:
             return None
@@ -57,24 +57,11 @@ class Hive(object):
         
         return sentiment_sum/confidence_sum
 
-    def get_closest_result(self, results, target_sentiment, confidence_threshold=0.03):
-        closest_result = None
+    def get_closest_n_results(self, results, target_sentiment, n):
+        closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment)/x['result_metadata']['confidence'], reverse=True)[:n]
+        return closest_results
 
-        closest_distance = float('inf')
-
-        for current_result in results:
-            if current_result['result_metadata']['confidence'] > confidence_threshold:
-                sentiment_score = current_result['enriched_body']['sentiment']['document']['score']
-
-                distance_to_target = abs(sentiment_score - target_sentiment)/current_result['result_metadata']['confidence']
-
-                if (distance_to_target < closest_distance):
-                    closest_distance = distance_to_target
-                    closest_result = current_result
-                    
-        return closest_result
-
-    def get_results(self, query, end_date, days_prior):
+    def get_results(self, query, end_date, days_prior, articles_per_day):
         result_dictionary = {
             'query_string': query,
             'ending_date': str(end_date),
@@ -94,15 +81,19 @@ class Hive(object):
             sentiment_score = self.get_average_sentiment_score(days_results)
             
             if sentiment_score is not None:
-                return_result = self.get_closest_result(days_results, sentiment_score)
-            
+                closest_results = self.get_closest_n_results(days_results, sentiment_score, articles_per_day)
+                article_urls = [x['url'] for x in closest_results]
+                article_sentiments = [x['enriched_body']['sentiment']['document']['score'] for x in closest_results]
+                article_titles = [x['title'] for x in closest_results]
+                
                 current_day_information_dict = {
                     'month': str(current_date.month),
                     'day': str(current_date.day),
                     'year': str(current_date.year),
                     'y': sentiment_score,
-                    'url': return_result['url'],
-                    'title': return_result['title']
+                    'article_urls': article_urls,
+                    'article_sentiments': article_sentiments,
+                    'article_titles': article_titles,
                 }
                 day_list.append(current_day_information_dict)
             
@@ -112,4 +103,4 @@ class Hive(object):
 
 if __name__ == '__main__':
     hive = Hive(sources=['reddit', 'cnbc'])
-    print(hive.get_results('coronavirus', date.today(), 7))
+    print(hive.get_results('michael bloomberg', date(day=5, month=3, year=2020), 7, 5))
