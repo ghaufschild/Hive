@@ -68,7 +68,8 @@ class Hive(object):
             'days_prior': days_prior,
         }
         
-        day_list = []
+        sentiment_list = []
+        articles_list = []
         
         start_date = end_date - timedelta(days=(days_prior - 1))
         
@@ -81,23 +82,29 @@ class Hive(object):
             sentiment_score = self.get_average_sentiment_score(days_results)
             
             if sentiment_score is not None:
-                closest_results = self.get_closest_n_results(days_results, sentiment_score, articles_per_day)
-                article_urls = [x['url'] for x in closest_results]
-                article_sentiments = [x['enriched_body']['sentiment']['document']['score'] for x in closest_results]
-                article_titles = [x['title'] for x in closest_results]
-                
-                current_day_information_dict = {
+                closest_results = self.get_closest_n_results(days_results, sentiment_score, articles_per_day)                
+                sentiment_list.append(
+                    {
                     'month': str(current_date.month),
                     'day': str(current_date.day),
                     'year': str(current_date.year),
                     'y': sentiment_score,
-                    'article_urls': article_urls,
-                    'article_sentiments': article_sentiments,
-                    'article_titles': article_titles,
-                }
-                day_list.append(current_day_information_dict)
+                    })
+
+                articles_list.extend([
+                    {
+                        'month': str(current_date.month),
+                        'day': str(current_date.day),
+                        'year': str(current_date.year),
+                        'y': article['enriched_body']['sentiment']['document']['score'],
+                        'url': article['url'],
+                        'title': article['title'],
+                    } for article in closest_results
+                ])
+                
             
-        result_dictionary['results'] = day_list
+        result_dictionary['average_sentiment'] = sentiment_list
+        result_dictionary['articles'] = articles_list
 
         return result_dictionary
 
