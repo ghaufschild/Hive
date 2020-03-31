@@ -3,9 +3,18 @@ import os
 import time
 from datetime import date
 from watson_query_utilities import Hive
+from apscheduler.schedulers.background import BackgroundScheduler
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
+
+def print_date_time():
+    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=print_date_time, trigger="interval", hours=24)
+
+scheduler.start()
 
 def format_server_time():
     server_time = time.localtime()
