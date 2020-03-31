@@ -1,25 +1,5 @@
-const accountSid = 'AC564dda9224e183521c28d931d65cb6d9';
-const authToken = '6e39de7cbae0f589ade80d3454ce4edc';
-
-const client = require('twilio')(accountSid, authToken);
-
 const functions = require('firebase-functions');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-
-function sendMessage() {
-	client.messages
-	  .create({
-	     body: 'This is a test message',
-	     from: '+16093373229',
-	     to: '+15714390820'
-	   })
-	  .then(message => {
-	  	console.log(message.sid); 
-	  	return null}).catch(() => null);
-	 //return null;
-}
-
 
 function performDailyUpdate() {
 	var today = new Date();
@@ -47,10 +27,8 @@ exports.scheduledFunctionCrontab = functions.pubsub.schedule('every 15 minutes')
   .onRun((context) => {
   console.log('This will be run every day at 11:55 AM Eastern!');
   performDailyUpdate();
-  sendMessage();
   return null;
 });
 
 console.log("Hello");
-sendMessage();
 performDailyUpdate();
