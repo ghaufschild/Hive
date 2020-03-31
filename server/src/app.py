@@ -8,11 +8,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
 
-def print_date_time():
-    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+def update_watson_database():
+    print('This will eventually call to update watson')
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=print_date_time, trigger="interval", hours=24)
+scheduler.add_job(func=update_watson_database, trigger="interval", hours=24)
 
 scheduler.start()
 
