@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, request
 import os
 import time
 from datetime import date
@@ -34,9 +34,11 @@ def about():
 #def uploaddocuments(day):
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
 
-@app.route('/search/<query>')
-def search(query):
-    return hive.get_results(query, date.today(), 7)
+@app.route('/search')
+def search(query, ):
+    query = request.args.get('query')
+    articles_per_day = request.args.get('articles')
+    return hive.get_results(query, date.today(), 7, articles_per_day)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))

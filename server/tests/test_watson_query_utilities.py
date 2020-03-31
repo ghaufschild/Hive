@@ -1,4 +1,3 @@
-# this file contains a single unit test for my_function located in server/src/example.py
 from datetime import date, timedelta
 import src.watson_query_utilities as watson_utils
 from unittest.mock import MagicMock
@@ -32,22 +31,22 @@ def test_get_average_sentiment_score_does_not_have_results():
     assert average_sentiment_score == None
 
 
-def test_get_closest_result_has_result():
+def test_get_closest_n_results_has_result():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=sample_query_result)
 
-    closest_result = watson_query_object.get_closest_result(sample_query_result, 0.0)
+    closest_results = watson_query_object.get_closest_n_results(sample_query_result, 0.0, 1)
 
-    assert closest_result == sample_query_result[0]
+    assert closest_results[0] == sample_query_result[0]
 
 
-def test_get_closest_result_has_no_result():
+def test_get_closest_n_results_has_no_result():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=[])
 
-    closest_result = watson_query_object.get_closest_result([], 0.0)
+    closest_results = watson_query_object.get_closest_n_result([], 0.0)
 
-    assert closest_result == None
+    assert closest_result == []
 
 
 def test_get_results_one_day():
