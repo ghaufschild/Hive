@@ -2,10 +2,10 @@ var chartData = "";
 
 function titleCase(str) {
     var splitStr = str.toLowerCase().split(' ');
-    for (var i = 0; i < splitStr.length; i++) { // You do not need to check if i is larger than splitStr length, as your for does that for you 
-        // Assign it back to the array 
+    for (var i = 0; i < splitStr.length; i++) { // You do not need to check if i is larger than splitStr length, as your for does that for you
+        // Assign it back to the array
         splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-    } 
+    }
     // Directly return the joined string
     return splitStr.join(' ');
 }
@@ -65,7 +65,7 @@ function getTrending() {
     });
 }
 
-getTrending();
+// getTrending();
 
 function askWatson() {
     document.getElementById("chartContainer").style.display = "none"
@@ -111,10 +111,51 @@ function askWatson() {
     });
 }
 
+function advSearch() {
+    document.getElementById("chartContainer").style.display = "none"
+    document.getElementById("placeholder").style.display = ""
+    // var question = $("#question").val();
+    // question = question.toLowerCase();
+
+    var base = '/search/';
+    var query = base.concat(question);
+    var chart = createChart();
+    chart.options.title.text = "Sentiment for Advanced Search";
+
+    // chart.options.data[0].dataPoints = bob["default"];
+    //
+    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+    // chart.options.data[1].dataPoints = bob["patriots"];
+    //
+    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+    // chart.options.data[2].dataPoints = bob["manchester united"];
+    //
+    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+    // chart.options.data[3].dataPoints = bob["google"];
+
+    // chart.options.data[0].dataPoints = results
+
+    var topics = document.getElementsByClassName("topic-input");
+    for (i = 0; i < topics.length; i++) {
+        console.log(topics[i].value);
+        if (i != 0) {
+            chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+        }
+        chart.options.data[i].dataPoints = bob[topics[i].value];
+    }
+
+    $('#chartContainer').css({
+        'border': 'solid black 5px'
+    });
+    document.getElementById("chartContainer").style.display = ""
+    document.getElementById("placeholder").style.display = "none"
+    chart.render();
+}
+
 function askTrending(question) {
     document.getElementById("chartContainer").style.display = "none"
     document.getElementById("placeholder").style.display = ""
-    
+
     question = question.toLowerCase();
 
     var base = '/search/';
@@ -227,11 +268,11 @@ function createEntry(e) {
             '<div class="form-row">' +
             '<div class="form-group col-md-9">' +
             '<label for="topic">Topic</label>' +
-            '<input type="string" class="form-control" id="topic" placeholder="Enter a topic here...">' +
+            '<input type="string" class="form-control topic-input" id="topic" placeholder="Enter a topic here...">' +
             '</div>' +
             '<div class="form-group col-md-2">' +
             '<label for="relevancy-threshold">RT</label>' +
-            '<select type="number" class="form-control 1-100" id="relevancy-threshold"></select>' +
+            '<select type="number" class="form-control 1-100" id="relevancy-threshold" disabled></select>' +
             '<script>' +
             '$(function(){' +
             'var $select = $(".1-100");' +
@@ -255,6 +296,7 @@ function createEntry(e) {
         window.alert("You have reached the maximum number of search fields.")
     }
 }
+
 var bob = {
     "default": [{
             "x": new Date(2012, 00, 1),
@@ -342,6 +384,90 @@ var bob = {
             "y": -0.2
         }
     ],
-    "manchester united": [0, 5, 25, 3, 16, 27, 0],
-    "google": [30, 40, 32, 20, 25, 10, 15]
+    "manchester united": [{
+            "x": new Date(2012, 00, 1),
+            "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": -0.2
+        },
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": 0.4
+        },
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": 0.1
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "NASA's TESS spacecraft reports its first exoplanet",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": 0.0
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Space Shuttle Discovery",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": -0.3
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": -0.1
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+            "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+            "y": -0.6
+        }
+    ],
+    "google": [{
+            "x": new Date(2012, 00, 1),
+            "title": "Family of Four Found Dead in Disney Community, Suspect in Custody",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": -0.5
+        },
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "Senator Ted Cruz proposes amendment to U.S. Constitution setting Congressional term limits",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": 0.3
+        },
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "State-run bus crashes in Cuba en route to Havana, killing seven",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": -0.2
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "NASA's TESS spacecraft reports its first exoplanet",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": 0.3
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Space Shuttle Discovery",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": 0.3
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Slow-cooking dinosaur eggs may have contributed to extinction, say scientists",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": 0.2
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Hurricane warning goes into effect in Bermuda as Gonzalo nears",
+            "url": "https://en.wikinews.org/wiki/Hurricane_warning_goes_into_effect_in_Bermuda_as_Gonzalo_nears",
+            "y": -0.6
+        }
+    ]
 }
