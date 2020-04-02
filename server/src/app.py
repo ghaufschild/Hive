@@ -1,15 +1,19 @@
 from flask import Flask, render_template, make_response, request
 import os
 import time
-from datetime import date
+from datetime import date, timedelta
 from watson_query_utilities import Hive
 from apscheduler.schedulers.background import BackgroundScheduler
+from scrape_cnbc import scrape_cnbc
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
 
 def update_watson_database():
-    print('This will eventually call to update watson')
+    today = date.today()
+    yesterday = today - timedelta(days=-1)
+    print(yesterday)
+    scrape_cnbc(yesterday)
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=update_watson_database, trigger="interval", hours=24)
