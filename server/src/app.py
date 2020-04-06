@@ -4,7 +4,7 @@ import time
 from datetime import date, timedelta
 import firebase_commands
 from watson_query_utilities import Hive
-
+from requests import get
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
@@ -43,19 +43,13 @@ def search(query):
 
 @app.route('/trending')
 def trending():
-    queries = firebase_commands.get_trending()
+
+    results = firebase_commands.get_all_documents_within_time_frame('trending')
 
     trending = []
 
-    for q in queries:
-        results = hive.get_results(q, date.today(), 7)
-
-        if len(results['results']) > 1:
-            results['change'] = results['results'][-1] - results['results'][-2]
-        else:
-            results['change'] = 0
-
-        trending.append(results)
+    for r in results:
+        trending.append(r.to_dict)
 
     return {'results': trending}
 
