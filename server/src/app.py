@@ -48,7 +48,7 @@ def trending():
     trending = []
 
     for q in queries:
-        results = watson_query.get_results(q, date.today(), 7)
+        results = hive.get_results(q, date.today(), 7)
 
         if len(results['results']) > 1:
             results['change'] = results['results'][-1] - results['results'][-2]
