@@ -146,6 +146,16 @@ function advSearch() {
             chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
         }
         chart.options.data[i].dataPoints = results;
+        chart.options.data[i].showInLegend = "true";
+        chart.options.data[i].legendText = (topics[i].value).toLowerCase();
+
+        // FOR TESTING LOCALLY
+        // if (i != 0) {
+        //     chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+        // }
+        // chart.options.data[i].dataPoints = bob[topics[i].value];
+        // chart.options.data[i].showInLegend = "true";
+        // chart.options.data[i].legendText = (topics[i].value).toLowerCase();
     }
 
     $('#chartContainer').css({
