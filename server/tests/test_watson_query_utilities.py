@@ -44,9 +44,9 @@ def test_get_closest_n_results_has_no_result():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=[])
 
-    closest_results = watson_query_object.get_closest_n_result([], 0.0)
+    closest_results = watson_query_object.get_closest_n_results([], 0.0, 0)
 
-    assert closest_result == []
+    assert closest_results == []
 
 
 def test_get_results_one_day():
@@ -64,11 +64,11 @@ def test_get_results_one_day():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=sample_query_result)
 
-    results = watson_query_object.get_results(test_query, test_date, test_days_prior)
+    results = watson_query_object.get_results(test_query, test_date, test_days_prior, 1)
 
+    print(results)
 
-    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'results': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604, 'url': 'https://www.cnbc.com/2020/02/15/article.html', 'title': 'Sample Title'}]}
-
+    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'average_sentiment': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604}], 'articles': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604, 'url': 'https://www.cnbc.com/2020/02/15/article.html', 'title': 'Sample Title'}]}
 
 def test_get_results_zero_days():
     test_query = "Query"
@@ -78,9 +78,9 @@ def test_get_results_zero_days():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=sample_query_result)
 
-    results = watson_query_object.get_results(test_query, test_date, test_days_prior)
+    results = watson_query_object.get_results(test_query, test_date, test_days_prior, 1)
 
-    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'results': []}
+    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'average_sentiment': [], 'articles': []}
 
 
 def test_get_results_negative_days():
@@ -91,6 +91,6 @@ def test_get_results_negative_days():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=sample_query_result)
 
-    results = watson_query_object.get_results(test_query, test_date, test_days_prior)
+    results = watson_query_object.get_results(test_query, test_date, test_days_prior, 1)
 
-    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'results': []}
+    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'average_sentiment': [], 'articles': []}
