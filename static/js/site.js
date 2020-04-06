@@ -65,23 +65,23 @@ function getTrending() {
     });
 }
 
-// getTrending();
+getTrending();
 
 function askWatson() {
-    document.getElementById("chartContainer").style.display = "none"
-    document.getElementById("placeholder").style.display = ""
+    document.getElementById("chartContainer").style.display = "none";
+    document.getElementById("placeholder").style.display = "";
     var question = $("#question").val();
     question = question.toLowerCase();
 
     var base = '/search/';
     var query = base.concat(question);
     var chart = createChart();
-    chart.options.title.text = "Sentiment for " + question
+    chart.options.title.text = "Sentiment for " + question;
 
     // HTTP GET request to Flask server
     $.get(query, function (err, req, resp) {
         if (req == "success") {
-            console.log('I AM HERE')
+            console.log('I AM HERE');
             results = resp.responseJSON.results;
 
             for (var i = 0; i < results.length; i++) {
@@ -89,66 +89,70 @@ function askWatson() {
                 // console.log(results[i].x);
 
             }
-            console.log(results)
-            chart.options.data[0].dataPoints = results
+            console.log(results);
+            chart.options.data[0].dataPoints = results;
             $('#chartContainer').css({
                 'border': 'solid black 5px'
             });
-            document.getElementById("chartContainer").style.display = ""
-            document.getElementById("placeholder").style.display = "none"
+            document.getElementById("chartContainer").style.display = "";
+            document.getElementById("placeholder").style.display = "none";
             chart.render();
 
         } else {
             chart.options.data[0].dataPoints = bob["default"];
-            chart.options.data[0].dataPoints = results
+            // chart.options.data[0].dataPoints = results;
             $('#chartContainer').css({
                 'border': 'solid black 5px'
             });
-            document.getElementById("chartContainer").style.display = ""
-            document.getElementById("placeholder").style.display = "none"
+            document.getElementById("chartContainer").style.display = "";
+            document.getElementById("placeholder").style.display = "none";
             chart.render();
         }
     });
 }
 
 function advSearch() {
-    document.getElementById("chartContainer").style.display = "none"
-    document.getElementById("placeholder").style.display = ""
-    // var question = $("#question").val();
-    // question = question.toLowerCase();
+    document.getElementById("chartContainer").style.display = "none";
+    document.getElementById("placeholder").style.display = "";
 
-    var base = '/search/';
-    var query = base.concat(question);
     var chart = createChart();
     chart.options.title.text = "Sentiment for Advanced Search";
 
-    // chart.options.data[0].dataPoints = bob["default"];
-    //
-    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
-    // chart.options.data[1].dataPoints = bob["patriots"];
-    //
-    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
-    // chart.options.data[2].dataPoints = bob["manchester united"];
-    //
-    // chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
-    // chart.options.data[3].dataPoints = bob["google"];
-
-    // chart.options.data[0].dataPoints = results
+    // GET request
 
     var topics = document.getElementsByClassName("topic-input");
     for (i = 0; i < topics.length; i++) {
+        var base = '/search/';
+        var query = base.concat((topics[i].value).toLowerCase());
+
         console.log(topics[i].value);
+
+        // HTTP GET request to Flask server
+        $.get(query, function (err, req, resp) {
+            if (req == "success") {
+                console.log('I AM HERE')
+                results = resp.responseJSON.results;
+
+                for (var i = 0; i < results.length; i++) {
+                    results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
+                }
+                console.log(results)
+            } else {
+                results = bob["default"];
+            }
+        });
+
         if (i != 0) {
             chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
         }
-        chart.options.data[i].dataPoints = bob[topics[i].value];
+        chart.options.data[i].dataPoints = results;
     }
 
     $('#chartContainer').css({
         'border': 'solid black 5px'
     });
-    document.getElementById("chartContainer").style.display = ""
-    document.getElementById("placeholder").style.display = "none"
+    document.getElementById("chartContainer").style.display = "";
+    document.getElementById("placeholder").style.display = "none";
     chart.render();
 }
 
