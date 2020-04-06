@@ -73,9 +73,11 @@ if __name__ == '__main__':
             if len(my_query) == 0:
                 break
             for doc in my_query['results']:
-                if doc['month'] != 3 and (not (doc['month'] == 2 and doc['day'] >= 28)):
-                    print(doc['title'], doc['month'], doc['day'])
-                    delete_docs.append(doc['id'])
+                print(doc['title'], doc['month'], doc['day'])
+                delete_docs.append(doc['id'])
         for doc_id in delete_docs:
             discovery.delete_document(env_id, collection_id, doc_id)
-    scrape_cnbc(date.today())
+
+    today = date.today()
+    for i in range(1, 7):
+        scrape_cnbc(date.today() - timedelta(days=i))

@@ -89,6 +89,8 @@ class Hive(object):
                     'day': str(current_date.day),
                     'year': str(current_date.year),
                     'y': sentiment_score,
+                    'url': closest_results[0]['url'],
+                    'title': closest_results[0]['title'],
                     })
 
                 articles_list.extend([
@@ -107,6 +109,18 @@ class Hive(object):
         result_dictionary['articles'] = articles_list
 
         return result_dictionary
+
+    def difference(self, query, end_date):
+        values = []
+        for i in range(7):
+            start_date = end_date - timedelta(days=i)
+            days_results = self.datapool.get_query_for_specific_day(query, current_date.year, current_date.month, current_date.day)
+            if len(day_results) > 0:
+                sentiment_score = self.get_average_sentiment_score(days_results)
+                values.append(sentiment_score)
+            if len(values) == 2:
+                return values[0] - values[1]
+        return 0
 
 if __name__ == '__main__':
     hive = Hive(sources=['reddit', 'cnbc'])
