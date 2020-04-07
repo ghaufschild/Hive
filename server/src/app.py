@@ -49,7 +49,7 @@ def about():
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
 
 @app.route('/search')
-def search(query, ):
+def search():
     query = request.args.get('query')
     firebase_commands.write_query_to_firebase(query)
     articles_per_day = int(request.args.get('articles'))
