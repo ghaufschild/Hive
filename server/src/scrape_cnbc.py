@@ -1,5 +1,4 @@
 import requests
-import feedparser
 import json
 from bs4 import  BeautifulSoup
 from ibm_watson import DiscoveryV1
@@ -7,7 +6,6 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from datetime import date, timedelta
 
 def scrape_cnbc(day):
-    print("Scraping CNBC for: " + str(day))
     authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
     discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
     discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
@@ -15,7 +13,6 @@ def scrape_cnbc(day):
     env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
     collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
 
-    #feed = feedparser.parse('http://www.cnbc.com/id/100727362/device/rss/rss.html')
     content = requests.get(day.strftime("https://www.cnbc.com/site-map/%Y/%B/%d"), allow_redirects=True).content
     soup = BeautifulSoup(content, features="html.parser")
     articles_list = soup.find('div', {'class': 'SiteMapArticleList-articleData'})
