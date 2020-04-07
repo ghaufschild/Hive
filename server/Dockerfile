@@ -2,7 +2,7 @@
 FROM python:3.7
 
 # 2
-RUN pip install Flask gunicorn ibm-watson requests firebase_admin
+RUN pip install Flask gunicorn ibm-watson requests firebase_admin apscheduler
 
 # 3
 COPY src/ /app
