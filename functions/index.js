@@ -18,10 +18,11 @@ function performDailyUpdate() {
 
 	xhttp.open('GET', "https://ipinfo.io/json", true);
 	xhttp.send();
-
+	return null;
 }
 
-exports.scheduledFunctionCrontab = functions.pubsub.schedule('55 11 * * *')
+//exports.scheduledFunctionCrontab = functions.pubsub.schedule('55 11 * * *')
+exports.scheduledFunctionCrontab = functions.pubsub.schedule('every 15 minutes')
   .timeZone('America/New_York')
   .onRun((context) => {
   console.log('This will be run every day at 11:55 AM Eastern!');
@@ -29,4 +30,5 @@ exports.scheduledFunctionCrontab = functions.pubsub.schedule('55 11 * * *')
   return null;
 });
 
+console.log("Hello");
 performDailyUpdate();

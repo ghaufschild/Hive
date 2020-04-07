@@ -15,19 +15,19 @@ function getTrending() {
     $.get(query, function (err, req,
         resp) {
         if (req == "success") {
+            console.log(resp);
             var trending = resp.responseJSON.results;
             var defaultTopic = "";
             var html = "";
             for (var topic in trending) {
                 var currTopic = trending[topic];
                 var title = currTopic.query_string;
-                var
-                    change = Math.round(currTopic.change * 100) / 100;
+                var change = Math.round(currTopic.change * 100) / 100;
                 if (change == 0) {
                     change = 0.00;
                 }
-                for (var i = 0; i < currTopic.results.length; i++) {
-                    currTopic.results[i].x = new Date(currTopic.results[i].year, currTopic.results[i].month - 1, currTopic.results[i].day); // console.log(results[i].x);
+                for (var i = 0; i < currTopic.articles.length; i++) {
+                    currTopic.articles[i].x = new Date(currTopic.articles[i].year, currTopic.articles[i].month - 1, currTopic.articles[i].day); // console.log(results[i].x);
                 }
                 html += '<hr><div class="row ';
                 if (change > 0) {
@@ -38,10 +38,10 @@ function getTrending() {
                     html += 'flat';
                 }
 
-                if (currTopic.results.length > 1) {
+                if (currTopic.articles.length > 1) {
                     html += ' hasData " onclick="askBob(\'' + title + '\')';
                         defaultTopic = title;
-                        bob[title] = currTopic.results;
+                        bob[title] = currTopic.articles;
                 } else {
                     html += ' noData';
                 }
@@ -73,16 +73,20 @@ function askWatson() {
     var question = $("#question").val();
     question = question.toLowerCase();
 
-    var base = '/search/';
-    var query = base.concat(question);
+    var base = '/search?';
+    var query = base.concat('query=', question, '&articles=1');
     var chart = createChart();
     chart.options.title.text = "Sentiment for " + question;
+    console.log(query);
+
+    var results = {};
 
     // HTTP GET request to Flask server
     $.get(query, function (err, req, resp) {
         if (req == "success") {
             console.log('I AM HERE');
-            results = resp.responseJSON.results;
+            results = resp.responseJSON.articles;
+            console.log(results);
 
             for (var i = 0; i < results.length; i++) {
                 results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
@@ -118,36 +122,70 @@ function advSearch() {
     var chart = createChart();
     chart.options.title.text = "Sentiment for Advanced Search";
 
-    // GET request
-
     var topics = document.getElementsByClassName("topic-input");
+    var terms = [];
+    var queries = [];
     for (i = 0; i < topics.length; i++) {
-        var base = '/search/';
-        var query = base.concat((topics[i].value).toLowerCase());
+        if ((topics[i].value).length != 0) {
+            var base = '/search?';
+            var term = (topics[i].value).toLowerCase();
+            terms.push(term);
+            var query = base.concat('query=', term, '&articles=1');
+            queries.push(query);
+        }
+    }
 
-        console.log(topics[i].value);
+    console.log(queries);
+
+    if (queries.length == 0) {
+        window.alert("Please enter at least one topic to search.");
+    }
+
+    for (i = 0; i < queries.length; i++) {
+        var results = {};
 
         // HTTP GET request to Flask server
-        $.get(query, function (err, req, resp) {
+        $.get(queries[i], function (err, req, resp) {
             if (req == "success") {
-                console.log('I AM HERE')
-                results = resp.responseJSON.results;
+                results = resp.responseJSON.articles;
+                var search = resp.responseJSON.query_string;
 
-                for (var i = 0; i < results.length; i++) {
-                    results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
+                for (var j = 0; j < results.length; j++) {
+                    results[j].x = new Date(results[j].year, results[j].month - 1, results[j].day);
                 }
-                console.log(results)
+                console.log(results);
+
+                if (i != 0) {
+                    chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: results, showInLegend: "true", legendText: search});
+                }
+                // chart.options.data[i].dataPoints = results;
+                // chart.options.data[i].showInLegend = "true";
+                // chart.options.data[i].legendText = term;
+
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = "";
+                document.getElementById("placeholder").style.display = "none";
+                chart.render();
             } else {
                 results = bob["default"];
+
+                if (i != 0) {
+                    chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
+                }
+                chart.options.data[i].dataPoints = results;
+                chart.options.data[i].showInLegend = "true";
+                chart.options.data[i].legendText = term;
+
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = "";
+                document.getElementById("placeholder").style.display = "none";
+                chart.render();
             }
         });
-
-        if (i != 0) {
-            chart.options.data.push({type: "line", toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}", dataPoints: {}});
-        }
-        chart.options.data[i].dataPoints = results;
-        chart.options.data[i].showInLegend = "true";
-        chart.options.data[i].legendText = (topics[i].value).toLowerCase();
 
         // FOR TESTING LOCALLY
         // if (i != 0) {
@@ -157,13 +195,6 @@ function advSearch() {
         // chart.options.data[i].showInLegend = "true";
         // chart.options.data[i].legendText = (topics[i].value).toLowerCase();
     }
-
-    $('#chartContainer').css({
-        'border': 'solid black 5px'
-    });
-    document.getElementById("chartContainer").style.display = "";
-    document.getElementById("placeholder").style.display = "none";
-    chart.render();
 }
 
 function askTrending(question) {
