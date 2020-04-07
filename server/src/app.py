@@ -4,12 +4,9 @@ import time
 from datetime import date, timedelta
 import firebase_commands
 from watson_query_utilities import Hive
-<<<<<<< HEAD
 from requests import get
-=======
 from apscheduler.schedulers.background import BackgroundScheduler
 import scrape_cnbc as scraper
->>>>>>> master
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
