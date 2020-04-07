@@ -59,11 +59,12 @@ def search():
 def trending():
 
     results = firebase_commands.get_all_documents_within_time_frame('trending')
-
     trending = []
 
     for r in results:
-        trending.append(r.to_dict)
+        trending.append(r.to_dict())
+
+    print(trending)
 
     return {'results': trending}
 
