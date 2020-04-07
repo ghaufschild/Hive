@@ -20,14 +20,14 @@ reddit = praw.Reddit(client_id='JwuaAJFEkxPH6A',
                      user_agent='scraper by /u/hivebot5914',
                      username='hivebot5914')
 
-reset = False
+reset = True
 if reset:
     for i in range(int(1000/50)):
         my_query = discovery.query(env_id, collection_id, query='*.*', count=50).get_result()
         if len(my_query) == 0:
             break
         for doc in my_query['results']:
-            print(doc['title'])
+            print('reset', doc['title'])
             discovery.delete_document(env_id, collection_id, doc['id'])
 
 character_limit = 50000
@@ -36,7 +36,7 @@ subreddit_names = ['inthenews', 'UpliftingNews', 'news', 'worldnews']
 for subreddit_name in subreddit_names:
     subreddit = reddit.subreddit(subreddit_name)
     extra = 0
-    for post in subreddit.top('day', limit=(int(250/len(subreddit_names))+extra)):
+    for post in subreddit.top('week', limit=(int(1000/len(subreddit_names))+extra)):
         post_title = remove_non_ascii(post.title)
         post_url = post.shortlink
         print(post_title, post_url)
