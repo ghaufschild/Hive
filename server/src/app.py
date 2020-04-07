@@ -1,24 +1,11 @@
 from flask import Flask, render_template, make_response, request
 import os
 import time
-from datetime import date, timedelta
+from datetime import date
 from watson_query_utilities import Hive
-from apscheduler.schedulers.background import BackgroundScheduler
-from scrape_cnbc import scrape_cnbc
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
-
-def update_watson_database():
-    today = date.today()
-    yesterday = today - timedelta(days=-1)
-    print(yesterday)
-    scrape_cnbc(yesterday)
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_watson_database, trigger="interval", hours=24)
-
-scheduler.start()
 
 def format_server_time():
     server_time = time.localtime()
@@ -50,7 +37,7 @@ def about():
 @app.route('/search')
 def search(query, ):
     query = request.args.get('query')
-    articles_per_day = request.args.get('articles')
+    articles_per_day = int(request.args.get('articles'))
     return hive.get_results(query, date.today(), 7, articles_per_day)
 
 if __name__ == '__main__':
