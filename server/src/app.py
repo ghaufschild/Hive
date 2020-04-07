@@ -1,7 +1,7 @@
 from flask import Flask, render_template, make_response, request
 import os
 import time
-from datetime import date, timedelta
+from datetime import date
 from watson_query_utilities import Hive
 from apscheduler.schedulers.background import BackgroundScheduler
 import scrape_cnbc as scraper
@@ -49,7 +49,7 @@ def about():
 @app.route('/search')
 def search(query, ):
     query = request.args.get('query')
-    articles_per_day = request.args.get('articles')
+    articles_per_day = int(request.args.get('articles'))
     return hive.get_results(query, date.today(), 7, articles_per_day)
 
 if __name__ == '__main__':
