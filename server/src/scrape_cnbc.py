@@ -7,6 +7,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from datetime import date, timedelta
 
 def scrape_cnbc(day):
+    print("Scraping CNBC for: " + str(day))
     authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
     discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
     discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
@@ -73,9 +74,11 @@ if __name__ == '__main__':
             if len(my_query) == 0:
                 break
             for doc in my_query['results']:
-                if doc['month'] != 3 and (not (doc['month'] == 2 and doc['day'] >= 28)):
-                    print(doc['title'], doc['month'], doc['day'])
-                    delete_docs.append(doc['id'])
+                print(doc['title'], doc['month'], doc['day'])
+                delete_docs.append(doc['id'])
         for doc_id in delete_docs:
             discovery.delete_document(env_id, collection_id, doc_id)
-    scrape_cnbc(date.today())
+
+    today = date.today()
+    for i in range(1, 7):
+        scrape_cnbc(date.today() - timedelta(days=i))
