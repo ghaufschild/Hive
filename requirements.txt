@@ -3,3 +3,7 @@ Flask
 ibm-watson
 ibm-cloud-sdk-core
 requests
+firebase-admin
+apscheduler
+praw
+bs4

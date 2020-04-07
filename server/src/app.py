@@ -1,8 +1,10 @@
 from flask import Flask, render_template, make_response, request
 import os
 import time
-from datetime import date
+from datetime import date, timedelta
+import firebase_commands
 from watson_query_utilities import Hive
+from requests import get
 from apscheduler.schedulers.background import BackgroundScheduler
 import scrape_cnbc as scraper
 
@@ -47,10 +49,24 @@ def about():
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
 
 @app.route('/search')
-def search(query, ):
+def search():
     query = request.args.get('query')
+    firebase_commands.write_query_to_firebase(query)
     articles_per_day = int(request.args.get('articles'))
     return hive.get_results(query, date.today(), 7, articles_per_day)
+
+@app.route('/trending')
+def trending():
+
+    results = firebase_commands.get_all_documents_within_time_frame('trending')
+    trending = []
+
+    for r in results:
+        trending.append(r.to_dict())
+
+    print(trending)
+
+    return {'results': trending}
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
