@@ -7,6 +7,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from datetime import date, timedelta
 
 def scrape_cnbc(day):
+    print("Scraping CNBC for: " + str(day))
     authenticator = IAMAuthenticator("EBkvmVslhKY36GZBRJ44attJ4zYkSfKIfmlUG2B0_8p6")
     discovery = DiscoveryV1(version="2019-04-30", authenticator=authenticator)
     discovery.set_service_url('https://api.us-east.discovery.watson.cloud.ibm.com/instances/622978c2-cc19-4abd-bc99-ef72da6c53fd')
