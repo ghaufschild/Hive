@@ -47,10 +47,13 @@ def about():
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
 
 @app.route('/search')
-def search(query, ):
+def search():
     query = request.args.get('query')
     articles_per_day = int(request.args.get('articles'))
     return hive.get_results(query, date.today(), 7, articles_per_day)
 
 if __name__ == '__main__':
+    #with app.test_client() as c:
+    #    response = c.get('/search?query=coronavirus&articles=1')
+    #    print(response)
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
