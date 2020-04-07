@@ -68,8 +68,8 @@ def test_get_results_one_day():
 
     print(results)
 
-    assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'average_sentiment': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604}], 'articles': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604, 'url': 'https://www.cnbc.com/2020/02/15/article.html', 'title': 'Sample Title'}]}
-
+    assert results == {'query_string': 'Query', 'ending_date': '2020-02-20', 'days_prior': 1, 'average_sentiment': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604, 'url': 'https://www.cnbc.com/2020/02/15/article.html', 'title': 'Sample Title'}], 'articles': [{'month': '2', 'day': '20', 'year': '2020', 'y': -0.553604, 'url': 'https://www.cnbc.com/2020/02/15/article.html', 'title': 'Sample Title'}]}
+    
 def test_get_results_zero_days():
     test_query = "Query"
     test_date = date.today()
