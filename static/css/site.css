@@ -1,14 +1,19 @@
 :root {
-  --top-bottom: #373737;
-  --center: #FEBE43;
-  --left-right-1: #696969;
-  --left-right-2: #525252;
-}
+    --top-bottom: #373737;
+    --center-1: #FEBE43;
+    --center-2: #D8A82A;
+    --left-right-1: #696969;
+    --left-right-2: #525252;
+    --arrow-size: 17px;
+    --arrow-height: 23px;
+    --arrow-margin: 3px;
+  }
 
 html, body {
     height: 100%;
     width: 100%;
     margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
 .background {
@@ -29,43 +34,44 @@ html, body {
 }
 
 .title {
-    margin: 10px 20px;
+    /*margin: 10px 20px;*/
     text-align: left;
 }
 
 #brand {
-    font-family: Marker Felt, fantasy;
+    /*font-family: Marker Felt, fantasy;*/
     font-variant: small-caps;
     font-size: 3.2em;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 #logo {
     height: 60px;
-    width: 50px;
     padding-bottom: 10px;
 }
 
 .search {
-    margin: 10px 20px;
+    /*margin: 10px 20px;*/
     text-align: right;
     padding-top: 20px;
-    padding-right: 100px;
+    /*padding-right: 100px;*/
 }
 
 .display {
     border-left: 5px solid white;
     border-right: 5px solid white;
-    background-color: var(--center);
+    background-color: var(--center-1);
+    /* background: repeating-linear-gradient(
+        45deg,
+        var(--center-1),
+        var(--center-1) 20px,
+        var(--center-2) 20px,
+        var(--center-2) 40px
+    ); */
 }
 
 .left-nav, .right-nav {
-    background: repeating-linear-gradient(
-        45deg,
-        var(--left-right-1),
-        var(--left-right-1) 25px,
-        var(--left-right-2) 25px,
-        var(--left-right-2) 50px);
+    background: white;
 }
 
 .footer {
@@ -96,4 +102,89 @@ html, body {
     left: 50%;
     margin-top: -150px;
     margin-left: -125px;
+}
+
+.trending h4{
+    display: inline;
+    text-align: center;
+}
+
+.trending .up{
+    color: #005600;
+}
+
+.trending .up .col-3:after {
+    content: "";
+    background: url(../img/greenArrow.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending .down{
+    color: #aa0000;
+}
+
+.trending .down .col-3:after {
+    content: "";
+    background: url(../img/redArrow.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending .flat{
+    color: gray;
+}
+
+.trending .flat .col-3:after {
+    content: "";
+    background: url(../img/greyLine.png) no-repeat;
+    background-size: var(--arrow-size);
+    height: var(--arrow-height);
+    width: var(--arrow-height);
+    margin-top: var(--arrow-margin);
+    margin-left: 5px;
+    position: absolute;
+}
+
+.trending hr {
+    border: none;
+    height: 2px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.trending .hasData {
+    cursor: pointer;
+}
+
+.trending .noData {
+    cursor: wait;
+}
+
+.form-group label {
+    margin-bottom: 0px;
+}
+
+.form-group .disabled {
+    cursor: not-allowed;
+}
+
+#remove {
+    color: white;
+    font-weight: 900;
+}
+
+.btn-link {
+    text-decoration: none !important
 }

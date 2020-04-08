@@ -43,10 +43,22 @@ def about():
 
     return response
 
+
 #from scrape_cnbc import scrape_cnbc
 #@app.route('/uploaddocuments/<day>'):
 #def uploaddocuments(day):
 #    scrape_cnbc(date.strptime(day, '%Y-%m-%d'))
+@app.route('/testing')
+def testing():
+    queries = firebase_commands.get_trending()
+
+    trending = []
+
+    for q in queries:
+        results = hive.get_results(q, date.today(), 7)
+        trending.append(results)
+
+    return {'results': trending}
 
 @app.route('/search')
 def search():
