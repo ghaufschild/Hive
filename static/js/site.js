@@ -273,6 +273,7 @@ function createChart(chartData) {
         axisX: {
             title: "Time",
             valueFormatString: "MMM DD",
+            intervalType: "day",
             interval: 1
         },
         data: [{
