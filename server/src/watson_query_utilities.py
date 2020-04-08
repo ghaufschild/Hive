@@ -59,7 +59,7 @@ class Hive(object):
 
     def get_closest_n_results(self, results, target_sentiment, n):
         #closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment)/x['result_metadata']['confidence'], reverse=True)[:n]
-        closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment), reverse=False)[:n]
+        closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment)/x['result_metadata']['confidence'], reverse=False)[:n]
         return closest_results
 
     def get_results(self, query, end_date, days_prior, articles_per_day):
