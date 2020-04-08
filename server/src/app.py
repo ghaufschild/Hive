@@ -69,4 +69,7 @@ def trending():
     return {'results': trending}
 
 if __name__ == '__main__':
+    #with app.test_client() as c:
+    #    response = c.get('/search?query=coronavirus&articles=1')
+    #    print(response)
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
