@@ -58,7 +58,8 @@ class Hive(object):
         return sentiment_sum/confidence_sum
 
     def get_closest_n_results(self, results, target_sentiment, n):
-        closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment)/x['result_metadata']['confidence'], reverse=True)[:n]
+        #closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment)/x['result_metadata']['confidence'], reverse=True)[:n]
+        closest_results = sorted(results, key = lambda x: abs(x['enriched_body']['sentiment']['document']['score']  - target_sentiment), reverse=False)[:n]
         return closest_results
 
     def get_results(self, query, end_date, days_prior, articles_per_day):
@@ -77,12 +78,13 @@ class Hive(object):
             current_date = start_date + timedelta(days=daysAgo)
             
             days_results = self.datapool.get_query_for_specific_day(query, current_date.year, current_date.month, current_date.day)
-            print(len(days_results))
+            print('Number of articles returned: ' + str(len(days_results)))
             
             sentiment_score = self.get_average_sentiment_score(days_results)
             
             if sentiment_score is not None:
-                closest_results = self.get_closest_n_results(days_results, sentiment_score, articles_per_day)                
+                closest_results = self.get_closest_n_results(days_results, sentiment_score, articles_per_day)
+                #print('closest_results: ' + str(closest_results))
                 sentiment_list.append(
                     {
                     'month': str(current_date.month),
@@ -124,4 +126,4 @@ class Hive(object):
 
 if __name__ == '__main__':
     hive = Hive(sources=['reddit', 'cnbc'])
-    print(hive.get_results('michael bloomberg', date(day=5, month=3, year=2020), 7, 5))
+    print(hive.get_results('trump', date(day=2, month=4, year=2020), 1, 5))
