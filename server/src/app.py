@@ -4,9 +4,9 @@ import time
 from datetime import date, timedelta
 import firebase_commands
 from watson_query_utilities import Hive
+from requests import get
 from apscheduler.schedulers.background import BackgroundScheduler
 import scrape_cnbc as scraper
-
 
 hive = Hive(sources=['reddit', 'cnbc'])
 app = Flask(__name__)
@@ -61,26 +61,22 @@ def testing():
     return {'results': trending}
 
 @app.route('/search')
-def search(query, ):
+def search():
     query = request.args.get('query')
+    firebase_commands.write_query_to_firebase(query)
     articles_per_day = int(request.args.get('articles'))
     return hive.get_results(query, date.today(), 7, articles_per_day)
 
 @app.route('/trending')
 def trending():
-    queries = firebase_commands.get_trending()
 
+    results = firebase_commands.get_all_documents_within_time_frame('trending')
     trending = []
 
-    for q in queries:
-        results = hive.get_results(q, date.today(), 7)
+    for r in results:
+        trending.append(r.to_dict())
 
-        if len(results['results']) > 1:
-            results['change'] = results['results'][-1]['y'] - results['results'][-2]['y']
-        else:
-            results['change'] = 0
-
-        trending.append(results)
+    print(trending)
 
     return {'results': trending}
 
