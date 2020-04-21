@@ -1,7 +1,6 @@
 import requests
-import feedparser
 import json
-from bs4 import  BeautifulSoup
+from bs4 import BeautifulSoup
 from ibm_watson import DiscoveryV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from datetime import date, timedelta
@@ -14,7 +13,6 @@ def scrape_cnbc(day):
     env_id = 'b098ddfa-f993-407c-bd74-b20a2c6fc54f'
     collection_id = '02d700e6-69c2-4d51-9d2f-b09e8e15ce8d'
 
-    #feed = feedparser.parse('http://www.cnbc.com/id/100727362/device/rss/rss.html')
     content = requests.get(day.strftime("https://www.cnbc.com/site-map/%Y/%B/%d"), allow_redirects=True).content
     soup = BeautifulSoup(content, features="html.parser")
     articles_list = soup.find('div', {'class': 'SiteMapArticleList-articleData'})
@@ -73,9 +71,11 @@ if __name__ == '__main__':
             if len(my_query) == 0:
                 break
             for doc in my_query['results']:
-                if doc['month'] != 3 and (not (doc['month'] == 2 and doc['day'] >= 28)):
-                    print(doc['title'], doc['month'], doc['day'])
-                    delete_docs.append(doc['id'])
+                print(doc['title'], doc['month'], doc['day'])
+                delete_docs.append(doc['id'])
         for doc_id in delete_docs:
             discovery.delete_document(env_id, collection_id, doc_id)
-    scrape_cnbc(date.today())
+
+    today = date.today()
+    for i in range(1, 7):
+        scrape_cnbc(date.today() - timedelta(days=i))

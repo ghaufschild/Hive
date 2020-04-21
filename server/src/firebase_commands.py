@@ -5,7 +5,7 @@ from collections import defaultdict, Counter
 from firebase_admin import credentials, firestore
 from operator import itemgetter
 
-#cred = credentials.Certificate("../../hive-5914-firebase-adminsdk-w772z-3f52e39450.json")
+# cred = credentials.Certificate("/Users/AndyWood/Documents/School/Spring 2020/CSE5914/Hive/hive-5914-firebase-adminsdk-w772z-ff36a4173c.json")
 app = firebase_admin.initialize_app()
 store = firestore.client()
 
@@ -31,18 +31,3 @@ def get_all_documents_within_time_frame(collection, days_ago = 0):
         return docs
     else:
         return store.collection(collection).stream()
-        
-def get_trending(days = 1):
-    
-    queries = get_all_documents_within_time_frame('queries', days)
-    
-    counts = defaultdict(int)
-
-    for q in queries:
-        q = q.to_dict()
-
-        counts[q['query']] += 1
-
-    trending = sorted(counts, key=counts.get, reverse=True)
-
-    return trending[:3]
