@@ -72,9 +72,10 @@ function askWatson() {
     document.getElementById("placeholder").style.display = "";
     var question = $("#question").val();
     question = question.toLowerCase();
-
-    var base = '/search?';
-    var query = base.concat('query=', question, '&articles=1');
+ 
+    var base = '/search?query=';
+    var query = base.concat(question);
+    query = query.concat("&articles=50");
     var chart = createChart();
     chart.options.title.text = "Sentiment for " + question;
     console.log(query);
@@ -84,24 +85,40 @@ function askWatson() {
     // HTTP GET request to Flask server
     $.get(query, function (err, req, resp) {
         if (req == "success") {
-            console.log('I AM HERE');
-            results = resp.responseJSON.articles;
-            console.log(results);
+            console.log('I AM HERE')
+            var results = resp.responseJSON.average_sentiment;
+            var scatter = resp.responseJSON.articles
 
             for (var i = 0; i < results.length; i++) {
                 results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
                 // console.log(results[i].x);
-
             }
-            console.log(results);
-            chart.options.data[0].dataPoints = results;
-            $('#chartContainer').css({
-                'border': 'solid black 5px'
-            });
-            document.getElementById("chartContainer").style.display = "";
-            document.getElementById("placeholder").style.display = "none";
-            chart.render();
 
+            for (var i = 0; i < scatter.length; i++) {
+                scatter[i].x = new Date(scatter[i].year, scatter[i].month - 1, scatter[i].day);
+                // console.log(results[i].x);
+            }
+
+            if(results.length == 0) {
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                $('#chartContainer').html("No data found.")
+            } else {
+                console.log(results)
+                chart.options.data[0].dataPoints = results
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                var data = {
+                    type: "scatter",
+                    toolTipContent: "<a href = {url} target='_blank'> {title}</a><hr/>Sentiment: {y}",
+                    dataPoints: scatter
+                }
+                chart.options.data.push(data);
+                chart.render();
+            }
         } else {
             chart.options.data[0].dataPoints = bob["default"];
             // chart.options.data[0].dataPoints = results;
@@ -114,6 +131,196 @@ function askWatson() {
         }
     });
 }
+
+function addScatter(chart) {
+    var data = {
+        type: "scatter",
+        toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+        dataPoints: bullshit()
+    }
+    //chart.options.data.push(data);
+}
+
+function bullshit() {
+    var data = [
+        {
+            "x": new Date(2012, 00, 1),
+            "title": "Fuck",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 00, 1),
+            "title": "Fuck",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 00, 1),
+            "title": "Fuck",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 00, 1),
+            "title": "Fuck",
+            "url": "https://en.wikinews.org/wiki/Family_of_Four_Found_Dead_in_Disney_Community,_Suspect_in_Custody",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": betweenValue()
+        },      
+        {
+            "x": new Date(2012, 01, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/Senator_Ted_Cruz_proposes_amendment_to_U.S._Constitution_setting_Congressional_term_limits",
+            "y": betweenValue()
+        },    
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 02, 1),
+            "title": "You",
+            "url": "https://en.wikinews.org/wiki/State-run_bus_crashes_in_Cuba_en_route_to_Havana,_killing_seven",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "Piece",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "Piece",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "Piece",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 03, 1),
+            "title": "Piece",
+            "url": "https://en.wikinews.org/wiki/NASA%27s_TESS_spacecraft_reports_its_first_exoplanet",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Of",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Of",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Of",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 04, 1),
+            "title": "Of",
+            "url": "https://en.wikinews.org/wiki/Category:Space_Shuttle_Discovery",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Shit",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Shit",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Shit",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 05, 1),
+            "title": "Shit",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Yeet",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Yeet",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Yeet",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        },
+        {
+            "x": new Date(2012, 06, 1),
+            "title": "Yeet",
+            "url": "https://en.wikinews.org/wiki/Slow-cooking_dinosaur_eggs_may_have_contributed_to_extinction,_say_scientists",
+            "y": betweenValue()
+        }
+    ]
+
+    return data;
+}
+
+function betweenValue() {
+    if(Math.random() > 0.5) {
+        return Math.round(Math.random()*100)/100*-1;
+    } else {
+        return Math.round(Math.random()*100)/100
 
 function advSearch() {
     document.getElementById("chartContainer").style.display = "none";
@@ -202,9 +409,10 @@ function askTrending(question) {
     document.getElementById("placeholder").style.display = ""
 
     question = question.toLowerCase();
-
-    var base = '/search/';
+ 
+    var base = '/search?query=';
     var query = base.concat(question);
+    query = query.concat("&articles=50");
     var chart = createChart();
     chart.options.title.text = "Sentiment for " + question
 
@@ -212,21 +420,28 @@ function askTrending(question) {
     $.get(query, function (err, req, resp) {
         if (req == "success") {
             console.log('I AM HERE')
-            results = resp.responseJSON.results;
+            results = resp.responseJSON.articles;
 
             for (var i = 0; i < results.length; i++) {
                 results[i].x = new Date(results[i].year, results[i].month - 1, results[i].day);
                 // console.log(results[i].x);
 
             }
-            console.log(results)
-            chart.options.data[0].dataPoints = results
-            $('#chartContainer').css({
-                'border': 'solid black 5px'
-            });
-            document.getElementById("chartContainer").style.display = ""
-            document.getElementById("placeholder").style.display = "none"
-            chart.render();
+            if(results.length == 0) {
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                $('#chartContainer').html("No data found.")
+            } else {
+                console.log(results)
+                chart.options.data[0].dataPoints = results
+                $('#chartContainer').css({
+                    'border': 'solid black 5px'
+                });
+                document.getElementById("chartContainer").style.display = ""
+                document.getElementById("placeholder").style.display = "none"
+                addScatter(chart)
+                chart.render();
+            }
 
         } else {
             chart.options.data[0].dataPoints = bob["default"];
@@ -236,6 +451,7 @@ function askTrending(question) {
             });
             document.getElementById("chartContainer").style.display = ""
             document.getElementById("placeholder").style.display = "none"
+            addScatter(chart);
             chart.render();
         }
     });
@@ -255,6 +471,26 @@ function askBob(topic) {
     });
     document.getElementById("chartContainer").style.display = ""
     document.getElementById("placeholder").style.display = "none"
+    addScatter(chart);
+    chart.render();
+}
+
+function askBobTest() {
+    var topic = "patriots";
+    document.getElementById("chartContainer").style.display = "none"
+    document.getElementById("placeholder").style.display = ""
+    $("#chartContainer").empty();
+    var chart = createChart();
+    chart.options.title.text = "Sentiment for " + topic
+
+    console.log(topic);
+    chart.options.data[0].dataPoints = bob[topic];
+    $('#chartContainer').css({
+        'border': 'solid black 5px'
+    });
+    document.getElementById("chartContainer").style.display = ""
+    document.getElementById("placeholder").style.display = "none"
+    addScatter(chart);
     chart.render();
 }
 
@@ -278,7 +514,7 @@ function createChart(chartData) {
         },
         data: [{
             type: "line",
-            toolTipContent: "<a href = {url}> {title}</a><hr/>Sentiment: {y}",
+            toolTipContent: "<a href = {url}, target='_blank'>{title}</a><hr/>Sentiment: {y}",
 
             // dataPoints: bob[question] || bob["default"]
         }]
@@ -312,21 +548,9 @@ function createEntry(e) {
         fields++;
         $(".form-wrapper").append(
             '<div class="form-row">' +
-            '<div class="form-group col-md-9">' +
+            '<div class="form-group col-md-11">' +
             '<label for="topic">Topic</label>' +
             '<input type="string" class="form-control topic-input" id="topic" placeholder="Enter a topic here...">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label for="relevancy-threshold">RT</label>' +
-            '<select type="number" class="form-control 1-100" id="relevancy-threshold" disabled></select>' +
-            '<script>' +
-            '$(function(){' +
-            'var $select = $(".1-100");' +
-            'for (i=1;i<=100;i++){' +
-            '$select.append($("<option></option>").val(i).html(i))' +
-            '}' +
-            '});' +
-            '</script>' +
             '</div>' +
             '<div class="form-group col-md-1">' +
             '<label for="inputPassword4">&nbsp;</label>' +

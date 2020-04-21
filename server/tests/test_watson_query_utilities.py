@@ -18,7 +18,6 @@ def test_get_average_sentiment_score_has_results():
 
 def test_get_average_sentiment_score_does_not_have_results():
     #old_results = sample_query_result
-
     #sample_query_result = []
 
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
@@ -29,7 +28,6 @@ def test_get_average_sentiment_score_does_not_have_results():
     #sample_query_result = old_results
 
     assert average_sentiment_score == None
-
 
 def test_get_closest_n_results_has_result():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
@@ -43,8 +41,6 @@ def test_get_closest_n_results_has_result():
 def test_get_closest_n_results_has_no_result():
     watson_query_object = watson_utils.Hive(TEST_SOURCES)
     watson_query_object.datapool.get_query_for_specific_day = MagicMock(return_value=[])
-
-    closest_results = watson_query_object.get_closest_n_results([], 0.0, 0)
 
     assert closest_results == []
 
@@ -94,3 +90,4 @@ def test_get_results_negative_days():
     results = watson_query_object.get_results(test_query, test_date, test_days_prior, 1)
 
     assert results == {'query_string': test_query, 'ending_date': str(test_date), 'days_prior': test_days_prior, 'average_sentiment': [], 'articles': []}
+

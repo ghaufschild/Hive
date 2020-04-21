@@ -8,56 +8,56 @@
     --arrow-height: 23px;
     --arrow-margin: 3px;
   }
-
-html, body {
+  
+ html, body {
     height: 100%;
     width: 100%;
     margin: 0;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-}
-
-.background {
+ }
+  
+ .background {
     display: flex;
     flex-flow: column;
     height: 100%;
-}
-
-.content {
+ }
+  
+ .content {
     flex-grow: 1;
-}
-
-.header {
+ }
+  
+ .header {
     border-bottom: 5px solid white;
     color: white;
     height: 100px;
     background-color: var(--top-bottom);
-}
-
-.title {
+ }
+  
+ .title {
     /*margin: 10px 20px;*/
     text-align: left;
-}
-
-#brand {
+ }
+  
+ #brand {
     /*font-family: Marker Felt, fantasy;*/
     font-variant: small-caps;
     font-size: 3.2em;
     font-weight: 300;
-}
-
-#logo {
+ }
+  
+ #logo {
     height: 60px;
     padding-bottom: 10px;
-}
-
-.search {
+ }
+  
+ .search {
     /*margin: 10px 20px;*/
     text-align: right;
     padding-top: 20px;
     /*padding-right: 100px;*/
-}
-
-.display {
+ }
+  
+ .display {
     border-left: 5px solid white;
     border-right: 5px solid white;
     background-color: var(--center-1);
@@ -68,13 +68,13 @@ html, body {
         var(--center-2) 20px,
         var(--center-2) 40px
     ); */
-}
-
-.left-nav, .right-nav {
+ }
+  
+ .left-nav, .right-nav {
     background: white;
-}
-
-.footer {
+ }
+  
+ .footer {
     border-top: 5px solid white;
     position: fixed;
     left: 0;
@@ -85,16 +85,16 @@ html, body {
     color: var(--top-bottom);
     text-align: center;
     padding: 30px;
-}
-
-#chartContainer {
+ }
+  
+ #chartContainer {
     margin-top: 35px;
     margin-left: 35px;
     height: 80%;
     width: 94%;
-}
-
-#placeholder {
+ }
+  
+ #placeholder {
     height: 250px;
     width: 250px;
     position: absolute;
@@ -102,18 +102,18 @@ html, body {
     left: 50%;
     margin-top: -150px;
     margin-left: -125px;
-}
-
-.trending h4{
+ }
+  
+ .trending h4{
     display: inline;
     text-align: center;
-}
-
-.trending .up{
+ }
+  
+ .trending .up{
     color: #005600;
-}
-
-.trending .up .col-3:after {
+ }
+  
+ .trending .up .col-3:after {
     content: "";
     background: url(../img/greenArrow.png) no-repeat;
     background-size: var(--arrow-size);
@@ -122,13 +122,13 @@ html, body {
     margin-top: var(--arrow-margin);
     margin-left: 5px;
     position: absolute;
-}
-
-.trending .down{
+ }
+  
+ .trending .down{
     color: #aa0000;
-}
-
-.trending .down .col-3:after {
+ }
+  
+ .trending .down .col-3:after {
     content: "";
     background: url(../img/redArrow.png) no-repeat;
     background-size: var(--arrow-size);
@@ -137,13 +137,13 @@ html, body {
     margin-top: var(--arrow-margin);
     margin-left: 5px;
     position: absolute;
-}
-
-.trending .flat{
+ }
+  
+ .trending .flat{
     color: gray;
-}
-
-.trending .flat .col-3:after {
+ }
+  
+ .trending .flat .col-3:after {
     content: "";
     background: url(../img/greyLine.png) no-repeat;
     background-size: var(--arrow-size);
@@ -152,9 +152,9 @@ html, body {
     margin-top: var(--arrow-margin);
     margin-left: 5px;
     position: absolute;
-}
-
-.trending hr {
+ }
+  
+ .trending hr {
     border: none;
     height: 2px;
     /* Set the hr color */
@@ -162,29 +162,92 @@ html, body {
     background-color: #333; /* Modern Browsers */
     margin-top: 8px;
     margin-bottom: 8px;
-}
-
-.trending .hasData {
+ }
+  
+ .trending .hasData {
     cursor: pointer;
-}
-
-.trending .noData {
+ }
+  
+ .trending .noData {
     cursor: wait;
-}
-
-.form-group label {
+ }
+  
+ .form-group label {
     margin-bottom: 0px;
-}
-
-.form-group .disabled {
+ }
+  
+ .form-group .disabled {
     cursor: not-allowed;
-}
-
-#remove {
+ }
+  
+ #remove {
     color: white;
     font-weight: 900;
-}
-
-.btn-link {
+ }
+  
+ .btn-link {
     text-decoration: none !important
-}
+ }
+  
+ .tooltipy {
+    position: relative;
+    display: inline-block;
+    bottom: 1px;
+ }
+   .tooltipy .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 6px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+   .tooltipy .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+   .tooltipy:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .tooltipy:before
+  {
+    content: '?';
+    display: inline-block;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    width: 2.3ex;
+    height: 2.3ex;
+    font-size: 1.4ex;
+    line-height: 1.9ex;
+    border-radius: 1.2ex;
+    margin-right: 4px;
+    padding: 1px 1px 1px 1px;
+    color: gray;
+    background: white;
+    border: 1px solid gray;
+    text-decoration: none;
+  }
+
+   .tooltipy:hover:before
+  {
+      color: white;
+      background: gray;
+      text-decoration: none;
+  } 

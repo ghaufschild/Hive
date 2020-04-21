@@ -1,149 +1,121 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-
+ 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="img/hive-logo.ico" type="image/x-icon" />
-    <title>Hive</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/site.css">
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <style>
-        .canvasjs-chart-tooltip {
-            pointer-events: auto !important;
-        }
-    </style>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="shortcut icon" href="img/hive-logo.ico" type="image/x-icon" />
+   <title>Hive</title>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+       crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="css/site.css">
+   <script src="js/jquery-3.2.1.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+       crossorigin="anonymous">
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+   <style>
+       .canvasjs-chart-tooltip {
+           pointer-events: auto !important;
+       }
+   </style>
+   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
-
+ 
 <body>
-    <div class="background text-center">
-        <div class="container-fluid header">
-            <div class="row">
-                <div class="offset-1 col-5 title">
-                    <span id="brand">
-                        Hive
-                        <img id="logo" alt="Image" src="img/hive-logo-main.png">
-                    </span>
-                </div>
-                <div class="offset-2 col-4 search">
-                    <div class="row">
-                        <div class="col-sm-9 question">
-                            <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="submit" class="btn btn-outline-warning" onclick="askWatson()">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid background">
-            <div class="row content">
-                <div class="col-8 display">
-                    <div id="chartContainer" style="display:none">
-
-                    </div>
-                    <img id="placeholder" src="img/flying_bee.gif">
-                </div>
-                <div class="col-4 left-nav">
-                    <div class="col-12 trending">
-                        <nav>
-                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
-                                    aria-selected="true">Trending</a>
-                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
-                                    aria-selected="false">Advanced Search</a>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                </br>
-                                <div id="trending">
-                                    
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                </br>
-                                <!-- <h2>Advanced Search</h2><hr style="height:1px;"> -->
-                                <form class="text-left">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-12">
-                                            <label for="exampleInputEmail1">Date Range</label>
-                                            <input type="text" name="dates" class="form-control pull-right" disabled/>
-                                            <script>
-                                                $(function () {
-                                                    $('input[name="dates"]').daterangepicker({
-                                                        startDate: moment(),
-                                                        endDate: moment().add(2, 'day')
-                                                    });
-                                                })
-                                            </script>
-                                        </div>
-                                    </div>
-                                    <div class="form-wrapper">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-9">
-                                                <label for="topic">Topic</label>
-                                                <input type="string" class="form-control topic-input" id="topic" placeholder="Enter a topic here...">
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label for="relevancy-threshold">RT</label>
-                                                <select type="number" class="form-control 1-100" id="relevancy-threshold" disabled></select>
-                                                <script>
-                                                    $(function () {
-                                                        var $select = $(".1-100");
-                                                        $select.empty();
-                                                        for (i = 1; i <= 100; i++) {
-                                                            $select.append($('<option></option>').val(i).html(i))
-                                                        }
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="form-group col-md-1">
-                                                <!-- <label for="inputPassword4">&nbsp;</label>
-                                                <button class="btn btn-block btn-link" onclick="removeEntry(event)" disabled>&#10060;</button> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>&nbsp;</label>
-                                        <button type="submit" class="create-entry btn btn-block btn-outline-secondary" onclick="createEntry(event)">
-                                            <span id="create">Add Topic</span>
-                                        </button>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>&nbsp;</label>
-                                        <button type="submit" class="btn btn-block btn-success" onclick="advSearch()">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid footer">
-            <b>HIVE</b>
-        </div>
-    </div>
+   <div class="background text-center">
+       <div class="container-fluid header">
+           <div class="row">
+               <div class="offset-1 col-5 title">
+                   <span id="brand">
+                       Hive
+                       <img id="logo" alt="Image" src="img/hive-logo-main.png">
+                       <div class="title-desc"> Sentiment Analyzer</div>
+                   </span>
+               </div>
+               <div class="offset-2 col-4 search">
+                   <div class="row">
+                       <div class="col-sm-9 question">
+                           <input type="text" class="form-control" placeholder="Enter a topic here..." id="question" value="" maxlength="100" />
+                       </div>
+                       <div class="col-sm-3">
+                           <button type="submit" class="btn btn-outline-warning" onclick="askWatson()">Search</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+ 
+       <div class="container-fluid background">
+           <div class="row content">
+               <div class="col-8 display">
+                   <div id="chartContainer" style="display:none">
+ 
+                   </div>
+                   <img id="placeholder" src="img/flying_bee.gif">
+               </div>
+               <div class="col-4 left-nav">
+                   <div class="col-12 trending">
+                       <nav>
+                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                               <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                                   aria-selected="true">Trending</a>
+                               <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                                   aria-selected="false">Advanced Search</a>
+                           </div>
+                       </nav>
+                       <div class="tab-content" id="nav-tabContent">
+                           <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                               <div id="trending">
+                                  
+                               </div>
+                           </div>
+                           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                               </br>
+                               <!-- <h2>Advanced Search</h2><hr style="height:1px;"> -->
+                               <form class="text-left">
+                                   <div class="form-wrapper">
+                                       <div class="form-row">
+                                           <div class="form-group col-md-11">
+                                               <label for="topic">Topic</label>
+                                               <input type="string" class="form-control" id="topic" placeholder="Enter a topic here...">
+                                           </div>
+                                           <div class="form-group col-md-1">
+                                               <!-- <label for="inputPassword4">&nbsp;</label>
+                                               <button class="btn btn-block btn-link" onclick="removeEntry(event)" disabled>&#10060;</button> -->
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="form-row">
+                                       <div class="form-group col-md-6">
+                                           <button type="submit" class="create-entry btn btn-block btn-info" onclick="createEntry(event)">
+                                               <span id="create">Add Topic</span>
+                                           </button>
+                                       </div>
+                                       <div class="form-group col-md-6">
+                                           <button type="submit" class="btn btn-block btn-success" onclick="askWatson()">Search</button>
+                                       </div>
+                                   </div>
+                               </form>
+ 
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+ 
+       <div class="container-fluid footer">
+           <b>HIVE</b>
+       </div>
+   </div>
 </body>
-
+ 
 <script src="js/bob.js"></script>
 <script src="js/site.js"></script>
-
+ 
 </html>
